@@ -38,6 +38,14 @@ const directive = (name: string): string =>
     .map((part) => part.trim())
     .find((part) => part.startsWith(`${name} `)) ?? '';
 
+describe('nuxt.config.ts', () => {
+  it('prefetches links on interaction, not visibility', () => {
+    expect(read('nuxt.config.ts')).toContain(
+      'prefetchOn: { visibility: false, interaction: true }'
+    );
+  });
+});
+
 describe('wrangler.jsonc', () => {
   const wrangler = read('wrangler.jsonc');
 

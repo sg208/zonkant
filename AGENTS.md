@@ -2,7 +2,7 @@
 
 - PROJECT: zonkant — sun and shadow planner, Nuxt 4 static site + OpenLayers + suncalc (`README.md:3`)
 - STATUS: v0.1.1 released (tag `v0.1.1`, `main`) and deployed to https://zonkant.engg.app on 2026-11-03 (`DEPLOYMENT.md:3`)
-- LEARNINGS: `.enggflo/learning.md` · DECISIONS: `.enggflo/brain.md`
+- LEARNINGS: `.enggflo/learning.md` · DECISIONS: `.enggflo/brain.md` · DESIGN: `design.md`
 - GITIGNORE: `.enggflo/` is ignored (`.gitignore:72`) — see Gotchas
 
 ## Commands
@@ -12,8 +12,8 @@ Verified 2026-11-03 with pnpm 10 and Node 24. `unverified` = not run in bootstra
 ```bash
 pnpm install --frozen-lockfile   # unverified: postinstall runs `nuxt prepare`; eslint needs `.nuxt/`
 pnpm dev                         # unverified: Nuxt dev server
-pnpm test                        # verified: vitest run, 18 files, 160 tests pass
-pnpm test:e2e                    # unverified: build, then Playwright on :4312; needs `pnpm exec playwright install chromium`
+pnpm test                        # verified: vitest run, 18 files, 161 tests pass
+pnpm test:e2e                    # verified 2026-11-03: build, then Playwright on :4312 (51 pass, 1 skipped); needs `pnpm exec playwright install chromium`
 pnpm lint                        # verified: eslint . — clean
 pnpm type-check                  # verified: vue-tsc --noEmit — exit 0
 pnpm format:check                # verified: prettier --check — clean
@@ -60,7 +60,7 @@ pnpm run deploy                  # verified 2026-11-03 (wrangler deploy step, ru
 | field       | value                                                                                                                                                                   |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | runner      | Vitest 5.1 + `@nuxt/test-utils`, `environment: 'nuxt'`, happy-dom, `TZ` Europe/Amsterdam (`vitest.config.ts:5,9`) · Playwright 1.64 (`playwright.config.ts`)            |
-| command     | `pnpm test` (unit + component, 160 pass) · `pnpm test:e2e` (build + Playwright; 52 tests: 51 pass, 1 skipped — the mobile-only layout test on chromium; run 2026-11-03) |
+| command     | `pnpm test` (unit + component, 161 pass) · `pnpm test:e2e` (build + Playwright; 52 tests: 51 pass, 1 skipped — the mobile-only layout test on chromium; run 2026-11-03) |
 | conventions | `tests/unit/*.spec.ts` · `tests/components/*.spec.ts` · `tests/e2e/*.e2e.ts` (`playwright.config.ts:7`) · `tests/setup.ts` mocks matchMedia and IntersectionObserver    |
 | levels      | unit ✓ (incl. component) · integration ✗ · e2e ✓                                                                                                                        |
 | enforced_by | unverified — no CI; `.github/` absent                                                                                                                                   |
