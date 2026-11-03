@@ -1,0 +1,58 @@
+{
+  "name": "zonkant",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "fix": "pnpm lint:fix && pnpm format",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,vue,json,jsonc,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,vue,json,jsonc,css,md}\"",
+    "type-check": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "pnpm build && playwright test",
+    "build": "nuxt generate",
+    "deploy": "pnpm generate && wrangler deploy"
+  },
+  "packageManager": "pnpm@10.34.8",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  },
+  "dependencies": {
+    "nuxt": "^4.6.4",
+    "ol": "^10.11.0",
+    "ol-mapbox-style": "^13.9.0",
+    "suncalc": "^2.1.1",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@fontsource-variable/tiktok-sans": "^5.3.0",
+    "@nuxt/eslint": "^1.17.0",
+    "@nuxt/test-utils": "^4.3.4",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^24.19.2",
+    "@vue/test-utils": "^2.5.1",
+    "eslint": "^10.14.0",
+    "happy-dom": "^21.0.4",
+    "prettier": "^3.9.10",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.0",
+    "vue-tsc": "^3.3.14",
+    "wrangler": "^4.156.2"
+  }
+}

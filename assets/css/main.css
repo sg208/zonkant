@@ -1,0 +1,140 @@
+/* Zonkant tokens. Colour tokens are mirrored in utils/palette.ts. */
+
+:root {
+  /* colour (flat; no gradients, shadows or blur) */
+  --ground: #f2f3f0;
+  --surface: #e4e7e2;
+  --ink: #14181c;
+  --ink-soft: #4a5258;
+  --accent: #a8340a;
+  --accent-ink: #ffffff;
+  --focus: #14181c;
+
+  /* OpenFreeMap Positron fills the map shows under the lines */
+  --map-ground: #f2f3f0;
+  --map-park: #e6e9e5;
+  --map-wood: #dce0dc;
+  --map-water: #c2c8ca;
+
+  /* sun lines */
+  --line-sunrise: #7a5200;
+  --line-sunset: #a3123f;
+  --line-sun: #b04000;
+  --line-shadow: #1f2d3a;
+
+  /* type */
+  --font-body:
+    'TikTok Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --text-readout: clamp(2.5rem, 12vw, 4.5rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --leading-body: 1.5;
+  --leading-display: 0.95;
+
+  /* layout */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --margin: 1rem;
+  --target: 44px; /* minimum touch target */
+
+  /* safe areas (viewport-fit=cover) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  /* motion */
+  --duration: 160ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 100%;
+  line-height: var(--leading-body);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+/* Visible focus on every interactive element, never removed */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button,
+input:not([type='range']),
+select {
+  min-height: var(--target);
+  border-radius: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-2);
+  top: -4rem;
+  z-index: 100;
+  padding: var(--space-2) var(--space-3);
+  background: var(--ink);
+  color: var(--ground);
+}
+
+.skip-link:focus {
+  top: var(--space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

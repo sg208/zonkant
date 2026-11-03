@@ -1,0 +1,6 @@
+/*
+ * Intentionally empty. ol-mapbox-style requests a font stylesheet for every
+ * map label font; by default that is cdn.jsdelivr.net, a third-party fetch.
+ * Pointing it here keeps the request same-origin, so map labels fall back to
+ * the browser's sans-serif and no visitor data leaves for a font CDN.
+ */
