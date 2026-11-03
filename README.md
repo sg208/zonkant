@@ -1,6 +1,6 @@
 # Zonkant
 
-Find the sunny side. A sun and shadow planner: tap a point on the map to draw the sunrise, sunset, current sun and shadow directions, and read the sun's height, key times and shadow length. Planned for https://zonkant.engg.app (not deployed yet).
+Find the sunny side. A sun and shadow planner: tap a point on the map to draw the sunrise, sunset, current sun and shadow directions, and read the sun's height, key times and shadow length. Live at https://zonkant.engg.app.
 
 - Tap the map, type coordinates or use "Locate me"
 - Pick a date and time with a keyboard-friendly slider

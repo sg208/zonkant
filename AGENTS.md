@@ -1,7 +1,7 @@
 # AGENTS.md
 
 - PROJECT: zonkant — sun and shadow planner, Nuxt 4 static site + OpenLayers + suncalc (`README.md:3`)
-- STATUS: v0.1.0 feature set on `develop`, pushed to `origin` (github.com/sg208/zonkant); not deployed (`git ls-remote origin`, `app.config.ts:3`)
+- STATUS: v0.1.1 released (tag `v0.1.1`, `main`) and deployed to https://zonkant.engg.app on 2026-11-03 (`DEPLOYMENT.md:3`)
 - LEARNINGS: `.enggflo/learning.md` · DECISIONS: `.enggflo/brain.md`
 - GITIGNORE: `.enggflo/` is ignored (`.gitignore:72`) — see Gotchas
 
@@ -19,7 +19,7 @@ pnpm type-check                  # verified: vue-tsc --noEmit — exit 0
 pnpm format:check                # verified: prettier --check — clean
 pnpm build                       # verified: nuxt generate -> .output/public, 12 routes, no network
 pnpm preview                     # unverified: serve the built output
-pnpm run deploy                  # unverified: side effect; from main only, after first release
+pnpm run deploy                  # verified 2026-11-03 (wrangler deploy step, run from a clean main worktree with sg208 workers token): side effect; main only
 ```
 
 ## Task routing
@@ -53,7 +53,7 @@ pnpm run deploy                  # unverified: side effect; from main only, afte
 | data source             | OpenFreeMap only: `https://tiles.openfreemap.org` (`components/SunMap.client.vue:29`)                                                                                       |
 | conventions             | explicit return types (`eslint.config.mjs:6`) · `script-setup` only (`:24`) · TS blocks (`:25`) · Prettier single quotes (`.prettierrc.json`)                               |
 | CI/CD                   | none — `.github/` absent; deploy is manual (`DEPLOYMENT.md:5`)                                                                                                              |
-| branches                | `develop` only; `main` at first release                                                                                                                                     |
+| branches                | `develop` + `main` (created 2026-11-03)                                                                                                                                     |
 
 ## Test profile
 
@@ -69,8 +69,8 @@ pnpm run deploy                  # unverified: side effect; from main only, afte
 
 - WHAT: sun and shadow planner; tap a map point to read sun height, direction, key times and a 1 m shadow (`README.md:3`)
 - WHO: people choosing a sunny balcony, terrace, garden or home, and photographers planning light; Amsterdam default (user brief, 2026-11-03)
-- STATUS: v0.1.0 feature set on `develop` (map, sun sheet, URL state, geolocation, legal pages, headers, tests); not deployed; remote `origin` = github.com/sg208/zonkant
-- BRANCHES: `develop` (current, only branch) · `main` created at first release · work branches `<type>/<slug>` off `develop` (global rule)
+- STATUS: v0.1.1 (map, sun sheet, URL state, geolocation, legal pages, headers, tests); deployed as Worker `zonkant` on sg208; remote `origin` = github.com/sg208/zonkant
+- BRANCHES: `develop` (work) · `main` (releases, tag `v0.1.1`) · work branches `<type>/<slug>` off `develop` (global rule)
 - COMMITS: no enforced convention; imperative subject observed (`git log`)
 - LICENCE: MIT (`package.json` `license`, `LICENSE`)
 
