@@ -2,25 +2,12 @@
 import type { LatLon, MapBearings } from '~/types/sun';
 import { deviceTimeZone } from '~/utils/format';
 import { getDayTimes, readSun, shadowLength } from '~/utils/sun';
-import { parseViewState, viewStateToDate } from '~/utils/urlState';
+import { viewStateToDate } from '~/utils/urlState';
 
 definePageMeta({ layout: 'app' });
 
 const { state } = useViewState();
-const route = useRoute();
 const bottomInset = ref(0);
-
-// WHY: a prerendered page hydrates on the path without its query, so useViewState starts from
-// defaults; Nuxt then navigates to the real URL. Adopt that first change once.
-if (import.meta.client) {
-  const stopAdopting = watch(
-    () => route.fullPath,
-    () => {
-      stopAdopting();
-      Object.assign(state, parseViewState(route.query, new Date()));
-    }
-  );
-}
 
 const point = computed<LatLon>(() => ({ lat: state.lat, lon: state.lon }));
 const moment = computed(() => viewStateToDate(state));
