@@ -11,7 +11,7 @@ defineProps<Props>();
   <div class="legal">
     <header>
       <h1 class="legal__title">{{ title }}</h1>
-      <p class="legal__updated">Updated 3 November 2026</p>
+      <p class="legal__updated">Updated 4 November 2026</p>
     </header>
     <div class="legal__body">
       <p class="legal__lead">{{ lead }}</p>

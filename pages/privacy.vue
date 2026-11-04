@@ -48,6 +48,13 @@ useHead({
         tiles.openfreemap.org supplies the map style, tiles, sprites and glyphs.
         It receives the area of the map you look at.
       </li>
+      <li>
+        photon.komoot.io finds places when you use the search field. The search
+        text you type is sent to it, together with your IP address, but only
+        after 3 characters and a short pause. Photon is run by komoot and uses
+        OpenStreetMap data. Coordinates and your "Locate me" position are never
+        sent to it.
+      </li>
       <li>Cloudflare hosts this site and delivers its files.</li>
     </ul>
     <p>

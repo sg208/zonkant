@@ -33,6 +33,11 @@ const credits: Credit[] = [
     note: 'Free hosting of the map tiles and the Positron style, without an API key.',
   },
   {
+    name: 'Photon',
+    href: 'https://photon.komoot.io',
+    note: 'Place search, run by komoot on OpenStreetMap data under the ODbL.',
+  },
+  {
     name: 'OpenLayers',
     href: 'https://openlayers.org/',
     note: 'The map library. BSD 2-Clause licence.',

@@ -16,7 +16,7 @@ describe('Legal pages', () => {
     const headings = wrapper.findAll('h1');
     expect(headings).toHaveLength(1);
     expect(headings[0]?.text()).toBe(title);
-    expect(wrapper.text()).toContain('Updated 3 November 2026');
+    expect(wrapper.text()).toContain('Updated 4 November 2026');
   });
 
   it('privacy names the tile host and states the on-device promises', async () => {
@@ -26,6 +26,15 @@ describe('Legal pages', () => {
     expect(text).toContain('No cookies');
     expect(text).toContain('no storage');
     expect(text).toContain('Cloudflare');
+  });
+
+  it('privacy discloses that typed search text goes to Photon, not coordinates', async () => {
+    const text = (await mountSuspended(PrivacyPage)).text();
+    expect(text).toContain('photon.komoot.io');
+    expect(text).toContain('The search text you type is sent to');
+    expect(text).toContain(
+      'Coordinates and your "Locate me" position are never sent'
+    );
   });
 
   it('terms warns about estimates and the sun', async () => {
@@ -45,7 +54,7 @@ describe('Legal pages', () => {
   it('credits lists every dependency with a link', async () => {
     const wrapper = await mountSuspended(CreditsPage);
     const entries = wrapper.findAll('li.credit');
-    expect(entries.length).toBeGreaterThanOrEqual(9);
+    expect(entries.length).toBeGreaterThanOrEqual(10);
     for (const name of [
       'OpenStreetMap contributors',
       'OpenMapTiles',
@@ -56,6 +65,7 @@ describe('Legal pages', () => {
       'TikTok Sans',
       'Nuxt',
       'Vue',
+      'Photon',
     ]) {
       const entry = entries.find((node) => node.text().includes(name));
       expect(entry, name).toBeDefined();
