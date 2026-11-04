@@ -33,6 +33,14 @@ const message = computed(() => {
   return '';
 });
 
+const isPopoverShown = computed(
+  () =>
+    isOpen.value &&
+    (status.value === 'loading' ||
+      status.value === 'empty' ||
+      status.value === 'error')
+);
+
 const handleInput = (event: Event): void => {
   query.value = (event.target as HTMLInputElement).value;
   movedTo.value = '';
@@ -91,36 +99,47 @@ const handleBlur = (): void => {
 <template>
   <div class="search">
     <label :for="`${id}-input`">Search a place</label>
-    <input
-      :id="`${id}-input`"
-      :value="query"
-      type="text"
-      role="combobox"
-      aria-autocomplete="list"
-      :aria-expanded="isExpanded"
-      :aria-controls="listId"
-      :aria-activedescendant="activeId"
-      autocomplete="off"
-      enterkeyhint="search"
-      spellcheck="false"
-      @input="handleInput"
-      @keydown="handleKeydown"
-      @blur="handleBlur"
-    />
-    <ul v-show="isExpanded" :id="listId" role="listbox" class="search__list">
-      <li
-        v-for="(place, index) in results"
-        :id="optionId(index)"
-        :key="place.id"
-        role="option"
-        :aria-selected="index === activeIndex"
-        class="search__option"
+    <div class="search__field">
+      <input
+        :id="`${id}-input`"
+        :value="query"
+        type="text"
+        role="combobox"
+        aria-autocomplete="list"
+        :aria-expanded="isExpanded"
+        :aria-controls="listId"
+        :aria-activedescendant="activeId"
+        autocomplete="off"
+        enterkeyhint="search"
+        spellcheck="false"
+        @input="handleInput"
+        @keydown="handleKeydown"
+        @blur="handleBlur"
+      />
+      <ul v-show="isExpanded" :id="listId" role="listbox" class="search__list">
+        <li
+          v-for="(place, index) in results"
+          :id="optionId(index)"
+          :key="place.id"
+          role="option"
+          :aria-selected="index === activeIndex"
+          class="search__option"
+          @mousedown="handleOptionMousedown"
+          @click="select(place)"
+        >
+          {{ place.label }}
+        </li>
+      </ul>
+      <p
+        v-if="isPopoverShown"
+        class="search__popover"
+        :class="{ search__error: status === 'error' }"
+        aria-hidden="true"
         @mousedown="handleOptionMousedown"
-        @click="select(place)"
       >
-        {{ place.label }}
-      </li>
-    </ul>
+        {{ message }}
+      </p>
+    </div>
     <div class="search__messages" role="status" aria-live="polite">
       <p v-if="message" :class="{ search__error: status === 'error' }">
         {{ message }}
@@ -134,6 +153,7 @@ const handleBlur = (): void => {
 
 <style scoped>
 .search {
+  position: relative;
   display: grid;
   gap: var(--space-1);
 }
@@ -155,14 +175,30 @@ input:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
-.search__list {
+.search__field {
+  position: relative;
+}
+.search__list,
+.search__popover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 2;
   margin: 0;
-  padding: 0;
-  max-height: 14rem;
-  overflow-y: auto;
-  list-style: none;
   border: 2px solid var(--ink);
   background: var(--ground);
+}
+.search__list {
+  padding: 0;
+  max-height: min(14rem, 40dvh);
+  overflow-y: auto;
+  list-style: none;
+}
+.search__popover {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-small);
+  overflow-wrap: anywhere;
 }
 .search__option {
   display: flex;
@@ -185,9 +221,18 @@ input:focus-visible {
 .search__hint {
   font-size: var(--text-small);
 }
-.search__messages p,
 .search__hint {
   margin: 0;
+}
+/* Announced by AT, never takes layout space */
+.search__messages {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 .search__error {
   color: var(--accent);

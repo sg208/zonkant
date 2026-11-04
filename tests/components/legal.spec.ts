@@ -28,6 +28,12 @@ describe('Legal pages', () => {
     expect(text).toContain('Cloudflare');
   });
 
+  it('privacy says the start place comes from the time zone and is never sent', async () => {
+    const text = (await mountSuspended(PrivacyPage)).text();
+    expect(text).toContain('time zone');
+    expect(text).toContain('never sent');
+  });
+
   it('privacy discloses that typed search text goes to Photon, not coordinates', async () => {
     const text = (await mountSuspended(PrivacyPage)).text();
     expect(text).toContain('photon.komoot.io');

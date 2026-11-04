@@ -33,6 +33,11 @@ useHead({
       can also type coordinates or tap the map instead.
     </p>
     <p>
+      When the address has no place in it, the map starts at the location of
+      your device's time zone. The time zone is read on your device and is never
+      sent anywhere.
+    </p>
+    <p>
       The place and time you pick are written into the address of the page (for
       example <code>?lat=52.37&amp;lon=4.89</code>) so you can bookmark or share
       the view. Whoever you give that address to can see those coordinates.

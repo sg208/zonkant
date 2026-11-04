@@ -134,4 +134,60 @@ test.describe('place search', () => {
     ).toBeVisible();
     expect(counts.seen).toBe(counts.fulfilled);
   });
+
+  test('layout: the controls below the input never move', async ({ page }) => {
+    let mode: 'results' | 'empty' | 'error' = 'results';
+    const counts = await mockPhoton(page, (route) =>
+      respondWith(
+        mode === 'empty' ? { features: [] } : FIXTURE,
+        mode === 'error' ? 500 : 200
+      )(route)
+    );
+    await openSearch(page);
+    const box = page.getByRole('combobox', { name: 'Search a place' });
+    const latitude = page.getByLabel('Latitude');
+    // fill() scrolls the input into view, so measure relative to the input
+    const gap = async (): Promise<number> => {
+      const inputBox = await box.boundingBox();
+      const latBox = await latitude.boundingBox();
+      return (latBox?.y ?? NaN) - (inputBox?.y ?? NaN);
+    };
+    const before = await gap();
+    expect(before).toBeGreaterThan(0);
+
+    await box.fill('amst');
+    await expect(page.getByRole('listbox')).toBeVisible();
+    const input = await box.boundingBox();
+    const list = await page.getByRole('listbox').boundingBox();
+    expect(list?.y ?? 0).toBeGreaterThanOrEqual(
+      (input?.y ?? 0) + (input?.height ?? 0)
+    );
+    expect(await gap()).toBe(before);
+
+    mode = 'empty';
+    await box.fill('zzzz');
+    await expect(page.locator('.search__popover')).toHaveText(
+      'No places found'
+    );
+    expect(await gap()).toBe(before);
+
+    mode = 'error';
+    await box.fill('boom');
+    await expect(page.locator('.search__popover')).toContainText(
+      'Search is unavailable'
+    );
+    expect(await gap()).toBe(before);
+
+    mode = 'results';
+    await box.fill('amsterdam');
+    await expect(page.getByRole('listbox')).toBeVisible();
+    await box.press('ArrowDown');
+    await box.press('Enter');
+    await expect(
+      page.getByRole('status').filter({ hasText: 'Moved to' })
+    ).toBeAttached();
+    await expect(page.getByRole('listbox')).toBeHidden();
+    expect(await gap()).toBe(before);
+    expect(counts.seen).toBe(counts.fulfilled);
+  });
 });

@@ -200,4 +200,36 @@ describe('PlaceSearch', () => {
     await typeQuery(wrapper);
     expect(wrapper.get('[role="status"]').text()).toBe('Searching…');
   });
+
+  // Protects: messages float over content instead of pushing it down.
+  // Turns red if the popover is dropped or shown with results/after select.
+  // Existing tests only read the status region, which cannot tell layouts apart.
+  it('shows a hidden-from-AT popover for empty and error, not for results', async () => {
+    fetchMock.mockImplementation(
+      async () => new Response('{"features":[]}', { status: 200 })
+    );
+    const empty = await mountSearch();
+    await typeQuery(empty);
+    const popover = empty.get('.search__popover');
+    expect(popover.text()).toBe('No places found');
+    expect(popover.attributes('aria-hidden')).toBe('true');
+    expect(empty.findAll('[role="status"] .search__popover')).toHaveLength(0);
+
+    fetchMock.mockImplementation(
+      async () => new Response('x', { status: 500 })
+    );
+    const failed = await mountSearch();
+    await typeQuery(failed);
+    expect(failed.get('.search__popover').text()).toContain(
+      'Search is unavailable'
+    );
+
+    fetchMock.mockImplementation(
+      async () => new Response(JSON.stringify(TWO), { status: 200 })
+    );
+    const found = await mountSearch();
+    await typeQuery(found);
+    expect(found.find('.search__popover').exists()).toBe(false);
+    expect(found.get('[role="status"]').text()).toBe('2 places found');
+  });
 });
