@@ -232,4 +232,21 @@ describe('PlaceSearch', () => {
     expect(found.find('.search__popover').exists()).toBe(false);
     expect(found.get('[role="status"]').text()).toBe('2 places found');
   });
+
+  it('scrolls the active option into view on arrow keys', async () => {
+    const scroll = vi
+      .spyOn(Element.prototype, 'scrollIntoView')
+      .mockImplementation(() => undefined);
+    const wrapper = await mountSuspended(PlaceSearch, {
+      attachTo: document.body,
+    });
+    await typeQuery(wrapper);
+    await wrapper.get('input').trigger('keydown', { key: 'ArrowUp' });
+    await flushPromises();
+    const last = wrapper.findAll('[role="option"]')[1]?.element;
+    expect(scroll).toHaveBeenCalledWith({ block: 'nearest' });
+    expect(scroll.mock.contexts.at(-1)).toBe(last);
+    scroll.mockRestore();
+    wrapper.unmount();
+  });
 });

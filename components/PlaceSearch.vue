@@ -58,13 +58,17 @@ const select = (place: GeocodePlace): void => {
   emit('update', { lat: place.lat, lon: place.lon });
 };
 
-const move = (step: 1 | -1): void => {
+const move = async (step: 1 | -1): Promise<void> => {
   const count = results.value.length;
   if (count === 0) return;
   isOpen.value = true;
   const next = activeIndex.value + step;
   if (activeIndex.value < 0) activeIndex.value = step === 1 ? 0 : count - 1;
   else activeIndex.value = (next + count) % count;
+  await nextTick();
+  document
+    .getElementById(optionId(activeIndex.value))
+    ?.scrollIntoView({ block: 'nearest' });
 };
 
 const handleKeydown = (event: KeyboardEvent): void => {
