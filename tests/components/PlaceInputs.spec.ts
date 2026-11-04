@@ -86,7 +86,9 @@ describe('PlaceInputs', () => {
       },
     });
     const wrapper = await mountInputs();
-    expect(wrapper.text()).toContain('stays on this device');
+    expect(wrapper.text()).toContain(
+      'Your location stays on this device and is never sent anywhere.'
+    );
     await wrapper.get('button').trigger('click');
     expect(wrapper.emitted('update')?.at(-1)).toEqual([
       { lat: 51.9244, lon: 4.4777 },

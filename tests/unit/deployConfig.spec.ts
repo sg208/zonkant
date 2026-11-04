@@ -38,6 +38,14 @@ const directive = (name: string): string =>
     .map((part) => part.trim())
     .find((part) => part.startsWith(`${name} `)) ?? '';
 
+describe('nuxt.config.ts', () => {
+  it('prefetches links on interaction, not visibility', () => {
+    expect(read('nuxt.config.ts')).toContain(
+      'prefetchOn: { visibility: false, interaction: true }'
+    );
+  });
+});
+
 describe('wrangler.jsonc', () => {
   const wrangler = read('wrangler.jsonc');
 
@@ -70,7 +78,7 @@ describe('public/_headers', () => {
     expect(policy).toContain('microphone=()');
   });
 
-  it('reports CSP, never enforces it, and allows only the tile host', () => {
+  it('reports CSP, never enforces it, and allows only the tile and Photon hosts', () => {
     expect(csp).toContain("default-src 'self'");
     for (const block of blocks) {
       expect(Object.keys(block.headers)).not.toContain(
@@ -79,6 +87,8 @@ describe('public/_headers', () => {
     }
     expect(directive('connect-src')).toContain('https://tiles.openfreemap.org');
     expect(directive('img-src')).toContain('https://tiles.openfreemap.org');
+    expect(directive('connect-src')).toContain('https://photon.komoot.io');
+    expect(directive('img-src')).not.toContain('https://photon.komoot.io');
     expect(directive('worker-src')).toBe("worker-src 'self' blob:");
   });
 

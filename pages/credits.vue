@@ -33,6 +33,16 @@ const credits: Credit[] = [
     note: 'Free hosting of the map tiles and the Positron style, without an API key.',
   },
   {
+    name: 'Photon',
+    href: 'https://photon.komoot.io',
+    note: 'Place search, run by komoot on OpenStreetMap data under the ODbL.',
+  },
+  {
+    name: 'IANA Time Zone Database',
+    href: 'https://www.iana.org/time-zones',
+    note: 'Where each time zone sits, used for the starting point. Public domain.',
+  },
+  {
     name: 'OpenLayers',
     href: 'https://openlayers.org/',
     note: 'The map library. BSD 2-Clause licence.',

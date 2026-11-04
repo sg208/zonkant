@@ -91,6 +91,7 @@ onBeforeUnmount(() => {
         :times="times"
         :time-zone="timeZone"
       />
+      <PlaceSearch @update="emit('place', $event)" />
       <PlaceInputs :lat="lat" :lon="lon" @update="emit('place', $event)" />
       <nav aria-label="Legal">
         <ul class="sheet__links">

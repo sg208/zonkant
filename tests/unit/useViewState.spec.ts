@@ -115,4 +115,59 @@ describe('useViewState', () => {
     expect(state.lat).toBe(52.3731);
     expect(state.time).toMatch(/^\d{2}:\d{2}$/);
   });
+
+  describe('adoptStart', () => {
+    const place = { lat: 40.7, lon: -74 };
+    const bare = async (): Promise<void> => {
+      await navigate({ path: '/', query: {} });
+    };
+
+    it('moves lat/lon without writing the URL, and a later edit writes the full query', async () => {
+      await bare();
+      const { state, adoptStart } = mount();
+      expect(adoptStart(place)).toBe(true);
+      expect(state.lat).toBe(40.7);
+      expect(state.lon).toBe(-74);
+      vi.advanceTimersByTime(DEBOUNCE_MS * 2);
+      expect(replace).not.toHaveBeenCalled();
+      state.time = '08:00';
+      vi.advanceTimersByTime(DEBOUNCE_MS);
+      expect(replace).toHaveBeenCalledTimes(1);
+      expect(replace).toHaveBeenCalledWith({
+        query: expect.objectContaining({
+          lat: '40.7',
+          lon: '-74',
+          time: '08:00',
+        }),
+      });
+    });
+
+    it('refuses when the route query has lat or lon', async () => {
+      await navigate({ path: '/', query: { lat: '51.9' } });
+      const { state, adoptStart } = mount();
+      expect(adoptStart(place)).toBe(false);
+      expect(state.lat).toBe(51.9);
+    });
+
+    it('refuses when window.location.search has lat or lon', async () => {
+      await bare();
+      window.history.replaceState(null, '', '/?lon=4.4');
+      try {
+        const { state, adoptStart } = mount();
+        expect(adoptStart(place)).toBe(false);
+        expect(state.lat).toBe(52.3731);
+      } finally {
+        window.history.replaceState(null, '', '/');
+      }
+    });
+
+    it('refuses once the state has left the default place', async () => {
+      await bare();
+      const { state, adoptStart } = mount();
+      state.lat = 10;
+      expect(adoptStart(place)).toBe(false);
+      expect(state.lat).toBe(10);
+      expect(state.lon).toBe(4.8926);
+    });
+  });
 });

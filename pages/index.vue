@@ -3,10 +3,11 @@ import type { LatLon, MapBearings } from '~/types/sun';
 import { deviceTimeZone } from '~/utils/format';
 import { getDayTimes, readSun, shadowLength } from '~/utils/sun';
 import { viewStateToDate } from '~/utils/urlState';
+import { zonePlace } from '~/utils/zoneStart';
 
 definePageMeta({ layout: 'app' });
 
-const { state } = useViewState();
+const { state, adoptStart } = useViewState();
 const bottomInset = ref(0);
 
 const point = computed<LatLon>(() => ({ lat: state.lat, lon: state.lon }));
@@ -22,6 +23,12 @@ const times = computed(() =>
   )
 );
 const timeZone = deviceTimeZone();
+
+// WHY: only after mount; at setup the prerendered Amsterdam default must hydrate unchanged
+onMounted(async () => {
+  const place = await zonePlace(timeZone);
+  if (place) adoptStart(place);
+});
 
 const bearingAt = (when: Date | null): number | null =>
   when ? readSun(when, state.lat, state.lon).bearingDeg : null;

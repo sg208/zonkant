@@ -35,6 +35,12 @@ export default defineNuxtConfig({
   // Server-render 404.html with error.vue instead of an empty SPA shell
   experimental: {
     prerenderErrorPages: true,
+    // Legal pages are rarely visited: prefetch on hover/focus, not on scroll-into-view
+    defaults: {
+      nuxtLink: {
+        prefetchOn: { visibility: false, interaction: true },
+      },
+    },
   },
 
   nitro: {

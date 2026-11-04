@@ -33,6 +33,11 @@ useHead({
       can also type coordinates or tap the map instead.
     </p>
     <p>
+      When the address has no place in it, the map starts at the location of
+      your device's time zone. The time zone is read on your device and is never
+      sent anywhere.
+    </p>
+    <p>
       The place and time you pick are written into the address of the page (for
       example <code>?lat=52.37&amp;lon=4.89</code>) so you can bookmark or share
       the view. Whoever you give that address to can see those coordinates.
@@ -47,6 +52,13 @@ useHead({
       <li>
         tiles.openfreemap.org supplies the map style, tiles, sprites and glyphs.
         It receives the area of the map you look at.
+      </li>
+      <li>
+        photon.komoot.io finds places when you use the search field. The search
+        text you type is sent to it, together with your IP address, but only
+        after 3 characters and a short pause. Photon is run by komoot and uses
+        OpenStreetMap data. Coordinates and your "Locate me" position are never
+        sent to it.
       </li>
       <li>Cloudflare hosts this site and delivers its files.</li>
     </ul>

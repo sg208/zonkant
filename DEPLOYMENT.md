@@ -1,8 +1,8 @@
 # Deployment
 
-Zonkant is not deployed yet. When it is, https://zonkant.engg.app will be a Cloudflare Worker that serves static assets, on the sg208 Cloudflare account. Deploy from `main` only.
+Zonkant runs at https://zonkant.engg.app, a Cloudflare Worker that serves static assets on the sg208 Cloudflare account. It was first deployed on 2026-11-03 from `main` at v0.1.1. Deploy from `main` only.
 
-Nothing is bound until `pnpm run deploy` is run by hand: there is no CI, no remote and no domain binding in this repository.
+There is no CI. Deploys are run by hand with `pnpm run deploy`. The custom domain creates its own proxied DNS record in the `engg.app` zone.
 
 ## Build
 
@@ -32,7 +32,7 @@ Requirements:
 `public/_headers` sets HSTS, nosniff, a referrer policy, `X-Frame-Options: DENY`, a Permissions-Policy and a Content-Security-Policy in Report-Only mode. Two choices differ from the pokedex project:
 
 - `geolocation=(self)`, because "Locate me" needs the browser location prompt.
-- The CSP allows `https://tiles.openfreemap.org` for images and fetches, and `worker-src 'self' blob:` for the map's tile workers.
+- The CSP allows `https://tiles.openfreemap.org` for images and fetches, `https://photon.komoot.io` for fetches only (place search), and `worker-src 'self' blob:` for the map's tile workers.
 
 The CSP is Report-Only on purpose. Before enforcing it, run `pnpm exec wrangler dev` on the built output, load `/`, use the map and read the browser console for violations. `npx serve` does not deliver `_headers`.
 
