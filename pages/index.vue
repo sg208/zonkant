@@ -23,11 +23,15 @@ const times = computed(() =>
   )
 );
 const timeZone = deviceTimeZone();
+const startNote = ref('');
 
 // WHY: only after mount; at setup the prerendered Amsterdam default must hydrate unchanged
 onMounted(async () => {
   const place = await zonePlace(timeZone);
-  if (place) adoptStart(place);
+  if (place && adoptStart(place)) {
+    const city = (timeZone.split('/').pop() ?? timeZone).replaceAll('_', ' ');
+    startNote.value = `Starting near ${city}, from your time zone`;
+  }
 });
 
 const bearingAt = (when: Date | null): number | null =>
@@ -54,6 +58,9 @@ useHead({ title: 'Zonkant - sun and shadow planner' });
 <template>
   <div class="page">
     <h1 class="visually-hidden page__title">Zonkant</h1>
+    <p class="visually-hidden page__start-note" role="status">
+      {{ startNote }}
+    </p>
     <!-- WHY: ClientOnly keeps a changing bottom-inset prop off the SSR placeholder while it hydrates -->
     <ClientOnly>
       <SunMap
