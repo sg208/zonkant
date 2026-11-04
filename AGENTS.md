@@ -12,7 +12,7 @@ Verified 2026-11-03 with pnpm 10 and Node 24. `unverified` = not run in bootstra
 ```bash
 pnpm install --frozen-lockfile   # unverified: postinstall runs `nuxt prepare`; eslint needs `.nuxt/`
 pnpm dev                         # unverified: Nuxt dev server
-pnpm test                        # verified 2026-11-04: vitest run, 24 files, 223 tests pass
+pnpm test                        # verified 2026-11-04: vitest run, 24 files, 224 tests pass
 pnpm test:e2e                    # verified 2026-11-04: build, then Playwright on :4312 (69 pass, 1 skipped); needs `pnpm exec playwright install chromium`
 pnpm lint                        # verified: eslint . — clean
 pnpm type-check                  # verified: vue-tsc --noEmit — exit 0
@@ -62,7 +62,7 @@ pnpm run deploy                  # verified 2026-11-03 (wrangler deploy step, ru
 | field       | value                                                                                                                                                                   |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | runner      | Vitest 5.1 + `@nuxt/test-utils`, `environment: 'nuxt'`, happy-dom, `TZ` Europe/Amsterdam (`vitest.config.ts:5,9`) · Playwright 1.64 (`playwright.config.ts`)            |
-| command     | `pnpm test` (unit + component, 223 pass) · `pnpm test:e2e` (build + Playwright; 70 tests: 69 pass, 1 skipped — the mobile-only layout test on chromium; run 2026-11-04) |
+| command     | `pnpm test` (unit + component, 224 pass) · `pnpm test:e2e` (build + Playwright; 70 tests: 69 pass, 1 skipped — the mobile-only layout test on chromium; run 2026-11-04) |
 | conventions | `tests/unit/*.spec.ts` · `tests/components/*.spec.ts` · `tests/e2e/*.e2e.ts` (`playwright.config.ts:7`) · `tests/setup.ts` mocks matchMedia and IntersectionObserver    |
 | levels      | unit ✓ (incl. component) · integration ✗ · e2e ✓                                                                                                                        |
 | enforced_by | unverified — no CI; `.github/` absent                                                                                                                                   |
