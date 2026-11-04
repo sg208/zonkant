@@ -134,7 +134,7 @@ describe('PlaceSearch', () => {
     );
   });
 
-  it('Enter without an active option does nothing and does not submit', async () => {
+  it('Enter with no active option selects the first', async () => {
     const wrapper = await mountSearch();
     await typeQuery(wrapper);
     const event = new KeyboardEvent('keydown', {
@@ -144,8 +144,16 @@ describe('PlaceSearch', () => {
     wrapper.get('input').element.dispatchEvent(event);
     await flushPromises();
     expect(event.defaultPrevented).toBe(true);
+    expect(wrapper.emitted('update')).toEqual([[{ lat: 52.37, lon: 4.9 }]]);
+  });
+
+  it('Enter with the list closed selects nothing', async () => {
+    const wrapper = await mountSearch();
+    await typeQuery(wrapper);
+    const input = wrapper.get('input');
+    await input.trigger('keydown', { key: 'Escape' });
+    await input.trigger('keydown', { key: 'Enter' });
     expect(wrapper.emitted('update')).toBeUndefined();
-    expect(wrapper.findAll('[role="option"]')).toHaveLength(2);
   });
 
   it('Escape closes the list and keeps the text', async () => {
@@ -155,6 +163,35 @@ describe('PlaceSearch', () => {
     await input.trigger('keydown', { key: 'Escape' });
     expect(input.attributes('aria-expanded')).toBe('false');
     expect((input.element as HTMLInputElement).value).toBe('amst');
+  });
+
+  it('Escape with the list closed clears', async () => {
+    const wrapper = await mountSearch();
+    await typeQuery(wrapper);
+    const input = wrapper.get('input');
+    await input.trigger('keydown', { key: 'Escape' });
+    await input.trigger('keydown', { key: 'Escape' });
+    await flushPromises();
+    expect((input.element as HTMLInputElement).value).toBe('');
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(0);
+    expect(wrapper.get('[role="status"]').text()).toBe('');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('status goes quiet after blur, but "Moved to" survives', async () => {
+    const wrapper = await mountSearch();
+    await typeQuery(wrapper);
+    const input = wrapper.get('input');
+    expect(wrapper.get('[role="status"]').text()).toBe('2 places found');
+    await input.trigger('blur');
+    expect(wrapper.get('[role="status"]').text()).toBe('');
+
+    await input.trigger('keydown', { key: 'ArrowDown' });
+    await input.trigger('keydown', { key: 'Enter' });
+    await input.trigger('blur');
+    expect(wrapper.get('[role="status"]').text()).toBe(
+      'Moved to Amsterdam, Netherlands'
+    );
   });
 
   it('selects on click, preventing the mousedown blur', async () => {

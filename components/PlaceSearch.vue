@@ -23,6 +23,7 @@ const activeId = computed(() =>
 
 const message = computed(() => {
   if (movedTo.value) return `Moved to ${movedTo.value}`;
+  if (!isOpen.value) return '';
   const count = results.value.length;
   if (status.value === 'loading') return 'Searching…';
   if (status.value === 'results')
@@ -80,12 +81,22 @@ const handleKeydown = (event: KeyboardEvent): void => {
     move(-1);
   } else if (event.key === 'Enter') {
     event.preventDefault();
-    const place = isExpanded.value ? results.value[activeIndex.value] : null;
+    const place = isExpanded.value
+      ? results.value[Math.max(activeIndex.value, 0)]
+      : null;
     if (place) select(place);
-  } else if (event.key === 'Escape' && isOpen.value) {
-    event.preventDefault();
-    isOpen.value = false;
-    activeIndex.value = -1;
+  } else if (event.key === 'Escape') {
+    if (isOpen.value) {
+      event.preventDefault();
+      isOpen.value = false;
+      activeIndex.value = -1;
+    } else if (query.value || results.value.length > 0) {
+      event.preventDefault();
+      clear();
+      query.value = '';
+      movedTo.value = '';
+      activeIndex.value = -1;
+    }
   }
 };
 

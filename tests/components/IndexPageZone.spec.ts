@@ -48,6 +48,33 @@ describe('IndexPage time-zone start', () => {
     expect(replace).not.toHaveBeenCalled();
   });
 
+  it('announces the zone start', async () => {
+    await navigateTo('/');
+    const wrapper = await mountSuspended(IndexPage, { route: '/' });
+    await vi.waitFor(() =>
+      expect(wrapper.find('.page__start-note').text()).toBe(
+        'Starting near New York, from your time zone'
+      )
+    );
+  });
+
+  it('makes no announcement when the URL has a place', async () => {
+    await navigateTo(DAY);
+    const wrapper = await mountSuspended(IndexPage, { route: DAY });
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(wrapper.find('.page__start-note').text()).toBe('');
+  });
+
+  it('renders the status element empty before mount', async () => {
+    await navigateTo('/');
+    const wrapper = await mountSuspended(IndexPage, { route: '/' });
+    const note = wrapper.find('.page__start-note');
+    expect(note.exists()).toBe(true);
+    expect(note.attributes('role')).toBe('status');
+    // WHY: the zone move lands after onMounted's async lazy-chunk lookup, so the first render is empty
+    expect(note.text()).toBe('');
+  });
+
   it('keeps the URL place when the URL has lat and lon', async () => {
     await navigateTo(DAY);
     const wrapper = await mountSuspended(IndexPage, { route: DAY });
