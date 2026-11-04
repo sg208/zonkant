@@ -1,7 +1,7 @@
 # AGENTS.md
 
 - PROJECT: zonkant — sun and shadow planner, Nuxt 4 static site + OpenLayers + suncalc (`README.md:3`)
-- STATUS: v0.1.1 released (tag `v0.1.1`, `main`) and deployed to https://zonkant.engg.app on 2026-11-03 (`DEPLOYMENT.md:3`)
+- STATUS: v0.1.2 released (tag `v0.1.2`, `main`) and deployed to https://zonkant.engg.app on 2026-11-04 (`DEPLOYMENT.md:3`)
 - LEARNINGS: `.enggflo/learning.md` · DECISIONS: `.enggflo/brain.md` · DESIGN: `design.md`
 - GITIGNORE: `.enggflo/` is ignored (`.gitignore:72`) — see Gotchas
 
@@ -71,7 +71,7 @@ pnpm run deploy                  # verified 2026-11-03 (wrangler deploy step, ru
 
 - WHAT: sun and shadow planner; tap a map point or search a place (Photon) to read sun height, direction, key times and a 1 m shadow (`README.md:3`)
 - WHO: people choosing a sunny balcony, terrace, garden or home, and photographers planning light; Amsterdam default (user brief, 2026-11-03)
-- STATUS: v0.1.1 (map, sun sheet, URL state, geolocation, legal pages, headers, tests); deployed as Worker `zonkant` on sg208; remote `origin` = github.com/sg208/zonkant
+- STATUS: v0.1.2 (map, sun sheet, URL state, geolocation, place search, time-zone start, legal pages, headers, tests); deployed as Worker `zonkant` on sg208; remote `origin` = github.com/sg208/zonkant
 - BRANCHES: `develop` (work) · `main` (releases, tag `v0.1.1`) · work branches `<type>/<slug>` off `develop` (global rule)
 - COMMITS: no enforced convention; imperative subject observed (`git log`)
 - LICENCE: MIT (`package.json` `license`, `LICENSE`)

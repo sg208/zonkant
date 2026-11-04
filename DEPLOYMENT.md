@@ -1,6 +1,6 @@
 # Deployment
 
-Zonkant runs at https://zonkant.engg.app, a Cloudflare Worker that serves static assets on the sg208 Cloudflare account. It was first deployed on 2026-11-03 from `main` at v0.1.1. Deploy from `main` only.
+Zonkant runs at https://zonkant.engg.app, a Cloudflare Worker that serves static assets on the sg208 Cloudflare account. It was first deployed on 2026-11-03 from `main` at v0.1.1. v0.1.2 was deployed on 2026-11-04. Deploy from `main` only.
 
 There is no CI. Deploys are run by hand with `pnpm run deploy`. The custom domain creates its own proxied DNS record in the `engg.app` zone.
 
