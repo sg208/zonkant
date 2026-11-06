@@ -1,6 +1,10 @@
+<script setup lang="ts">
+const { t } = useI18n();
+</script>
+
 <template>
   <div class="shell">
-    <a href="#main" class="skip-link">Skip to content</a>
+    <a href="#main" class="skip-link">{{ t('shell.skip') }}</a>
     <AppHeader />
     <main id="main" tabindex="-1" class="shell__main">
       <slot />

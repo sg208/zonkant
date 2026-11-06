@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('home', () => {
   test('shows the Amsterdam defaults and a sun readout', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/en/');
     await expect(
       page.getByRole('heading', { level: 1, name: 'Zonkant' })
     ).toHaveCount(1);
@@ -13,12 +13,12 @@ test.describe('home', () => {
   });
 
   test('legal pages open from the home link row', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/en/');
     const toggle = page.getByRole('button', { name: 'More' });
     if (await toggle.isVisible()) await toggle.click();
     const nav = page.getByRole('navigation', { name: 'Legal' });
     await nav.getByRole('link', { name: 'Privacy' }).click();
-    await expect(page).toHaveURL(/\/privacy/);
+    await expect(page).toHaveURL(/\/en\/privacy/);
     await expect(page.getByRole('heading', { level: 1 })).toContainText(
       'Privacy'
     );
@@ -26,10 +26,10 @@ test.describe('home', () => {
 
   // Night readouts are the widest strings the panel shows; 359° NNW is the longest bearing
   for (const [label, url] of [
-    ['-45.0° 44° NE', '/?lat=52.3731&lon=4.8926&date=2026-11-03&time=02:26'],
+    ['-45.0° 44° NE', '/en/?lat=52.3731&lon=4.8926&date=2026-11-03&time=02:26'],
     [
       'night with a long bearing',
-      '/?lat=52.3731&lon=4.8926&date=2026-06-21&time=00:05',
+      '/en/?lat=52.3731&lon=4.8926&date=2026-06-21&time=00:05',
     ],
   ] as const) {
     test(`readouts stay inside the panel and apart (${label})`, async ({
@@ -79,7 +79,7 @@ test.describe('home', () => {
   }
 
   test('zoom buttons are not covered by anything else', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/en/');
     for (const selector of ['.ol-zoom-in', '.ol-zoom-out']) {
       const button = page.locator(selector);
       await expect(button).toBeVisible();
@@ -96,7 +96,7 @@ test.describe('home', () => {
   });
 
   test('every attribution link is visible and clickable', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/en/');
     const links = page.locator('.sun-map__attribution a');
     await expect(links).toHaveCount(3);
     const results = await links.evaluateAll((nodes) =>
@@ -119,7 +119,7 @@ test.describe('home', () => {
   test('page title is phone-sized and panel labels are plain sentence case', async ({
     page,
   }) => {
-    await page.goto('/');
+    await page.goto('/en/');
     const h1 = await page
       .getByRole('heading', { level: 1, name: 'Zonkant' })
       .evaluate((node) => parseFloat(getComputedStyle(node).fontSize));

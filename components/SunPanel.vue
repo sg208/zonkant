@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { AppLocale } from '~/types/locale';
 import type { DayTimes, SunReading, TimeRange } from '~/types/sun';
 import {
+  formatAltitude,
   formatCompass,
   formatDuration,
   formatShadow,
@@ -15,81 +17,90 @@ const props = defineProps<{
   timeZone: string;
 }>();
 
+const { t, locale } = useI18n();
+const appLocale = computed<AppLocale>(() =>
+  locale.value === 'nl' ? 'nl' : 'en'
+);
+
 const isBelowHorizon = computed(() => props.reading.altitudeDeg <= 0);
 
 const dayNote = computed(() => {
-  if (props.times.daylight === 'polar-day')
-    return 'Polar day: the sun does not set today.';
-  if (props.times.daylight === 'polar-night')
-    return 'Polar night: the sun does not rise today.';
-  if (isBelowHorizon.value) return 'The sun is below the horizon at this time.';
+  if (props.times.daylight === 'polar-day') return t('panel.polarDay');
+  if (props.times.daylight === 'polar-night') return t('panel.polarNight');
+  if (isBelowHorizon.value) return t('panel.belowHorizon');
   return '';
 });
 
 const eventText = (date: Date | null): string => {
-  if (date) return formatTime(date);
-  if (props.times.daylight === 'polar-day') return 'Sun stays up';
-  if (props.times.daylight === 'polar-night') return 'Sun stays down';
-  return 'None today';
+  if (date) return formatTime(date, appLocale.value);
+  if (props.times.daylight === 'polar-day') return t('panel.staysUp');
+  if (props.times.daylight === 'polar-night') return t('panel.staysDown');
+  return t('panel.none');
 };
 
 const rangeText = (range: TimeRange): string =>
   range.start || range.end
-    ? `${formatTime(range.start)}-${formatTime(range.end)}`
-    : 'None today';
+    ? `${formatTime(range.start, appLocale.value)}-${formatTime(range.end, appLocale.value)}`
+    : t('panel.none');
 
 const bothRanges = (morning: TimeRange, evening: TimeRange): string =>
-  `${rangeText(morning)} and ${rangeText(evening)}`;
+  t('panel.bothRanges', {
+    morning: rangeText(morning),
+    evening: rangeText(evening),
+  });
 </script>
 
 <template>
   <section class="sun-panel" aria-labelledby="sun-panel-title">
-    <h2 id="sun-panel-title" class="sun-panel__title">Sun right now</h2>
+    <h2 id="sun-panel-title" class="sun-panel__title">
+      {{ t('panel.title') }}
+    </h2>
     <dl class="sun-panel__primary">
       <div>
-        <dt>Altitude</dt>
-        <dd class="sun-panel__big">{{ reading.altitudeDeg.toFixed(1) }}°</dd>
-      </div>
-      <div>
-        <dt>Bearing</dt>
+        <dt>{{ t('panel.altitude') }}</dt>
         <dd class="sun-panel__big">
-          {{ Math.round(reading.bearingDeg) }}°
-          {{ formatCompass(reading.bearingDeg) }}
+          {{ formatAltitude(reading.altitudeDeg, appLocale) }}
         </dd>
       </div>
       <div>
-        <dt>Shadow of 1 m</dt>
-        <dd class="sun-panel__big">{{ formatShadow(shadowM) }}</dd>
+        <dt>{{ t('panel.bearing') }}</dt>
+        <dd class="sun-panel__big">
+          {{ Math.round(reading.bearingDeg) }}°
+          {{ formatCompass(reading.bearingDeg, appLocale) }}
+        </dd>
+      </div>
+      <div>
+        <dt>{{ t('panel.shadow') }}</dt>
+        <dd class="sun-panel__big">{{ formatShadow(shadowM, appLocale) }}</dd>
       </div>
     </dl>
     <p v-if="dayNote" class="sun-panel__note">{{ dayNote }}</p>
 
-    <h3 class="sun-panel__subtitle">Today</h3>
+    <h3 class="sun-panel__subtitle">{{ t('panel.today') }}</h3>
     <dl class="sun-panel__times">
       <div>
-        <dt>Sunrise</dt>
+        <dt>{{ t('panel.sunrise') }}</dt>
         <dd>{{ eventText(times.sunrise) }}</dd>
       </div>
       <div>
-        <dt>Sunset</dt>
+        <dt>{{ t('panel.sunset') }}</dt>
         <dd>{{ eventText(times.sunset) }}</dd>
       </div>
       <div>
-        <dt>Golden hour</dt>
+        <dt>{{ t('panel.goldenHour') }}</dt>
         <dd>{{ bothRanges(times.goldenMorning, times.goldenEvening) }}</dd>
       </div>
       <div>
-        <dt>Blue hour</dt>
+        <dt>{{ t('panel.blueHour') }}</dt>
         <dd>{{ bothRanges(times.blueMorning, times.blueEvening) }}</dd>
       </div>
       <div>
-        <dt>Day length</dt>
-        <dd>{{ formatDuration(times.dayLengthMin) }}</dd>
+        <dt>{{ t('panel.dayLength') }}</dt>
+        <dd>{{ formatDuration(times.dayLengthMin, appLocale) }}</dd>
       </div>
     </dl>
     <p class="sun-panel__fine">
-      Times in {{ timeZone }} (this device's time zone). Shadows assume flat
-      ground, no buildings.
+      {{ t('panel.fine', { timeZone }) }}
     </p>
   </section>
 </template>

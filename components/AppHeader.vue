@@ -5,16 +5,23 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), { isOverlay: false });
+
+const localePath = useLocalePath();
 </script>
 
 <template>
   <header :class="['site-header', { 'site-header--overlay': isOverlay }]">
-    <NuxtLink to="/" class="site-header__mark">Zonkant</NuxtLink>
+    <NuxtLink :to="localePath('/')" class="site-header__mark">Zonkant</NuxtLink>
+    <LanguageSwitcher />
   </header>
 </template>
 
 <style scoped>
 .site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
   padding: var(--safe-top) calc(var(--margin) + var(--safe-right)) 0
     calc(var(--margin) + var(--safe-left));
 }

@@ -7,6 +7,8 @@ import { zonePlace } from '~/utils/zoneStart';
 
 definePageMeta({ layout: 'app' });
 
+const { t } = useI18n();
+
 const { state, adoptStart } = useViewState();
 const bottomInset = ref(0);
 
@@ -30,7 +32,7 @@ onMounted(async () => {
   const place = await zonePlace(timeZone);
   if (place && adoptStart(place)) {
     const city = (timeZone.split('/').pop() ?? timeZone).replaceAll('_', ' ');
-    startNote.value = `Starting near ${city}, from your time zone`;
+    startNote.value = t('home.startNote', { city });
   }
 });
 
@@ -52,7 +54,12 @@ const handleSelect = (place: LatLon): void => {
   state.lon = place.lon;
 };
 
-useHead({ title: 'Zonkant - sun and shadow planner' });
+useHead({
+  title: computed(() => t('home.title')),
+  meta: [
+    { name: 'description', content: computed(() => t('home.description')) },
+  ],
+});
 </script>
 
 <template>

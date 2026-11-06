@@ -1,0 +1,126 @@
+{
+  "updated": "Bijgewerkt op 4 november 2026",
+  "privacy": {
+    "title": "Privacy",
+    "description": "Zonkant plaatst geen cookies, volgt je niet en bewaart niets in je browser. Je locatie blijft op je apparaat.",
+    "lead": "Zonkant verzamelt niets over jou. Er zijn geen accounts, geen cookies en geen tracking.",
+    "device": {
+      "heading": "Wat op je apparaat blijft",
+      "body": "Geen cookies. Er wordt ook niets opgeslagen: er staat niets in de local storage of session storage van je browser en er wordt niets onthouden als je de pagina sluit.",
+      "language": "Zonkant is er in het Nederlands en het Engels. Als je de site opent, leest je apparaat de talenlijst van je browser om er een te kiezen. Die lijst wordt nergens naartoe gestuurd en je keuze wordt niet bewaard."
+    },
+    "location": {
+      "heading": "Je locatie",
+      "press": "Je positie wordt alleen opgehaald als je op “{locate}” tikt, en dan één keer. Die blijft op je apparaat: ze wordt niet naar deze site of naar iemand anders gestuurd. Je kunt ook coördinaten invullen of op de kaart tikken.",
+      "zone": "Staat er geen plaats in het adres, dan begint de kaart bij de locatie van de tijdzone van je apparaat. Die tijdzone wordt op je apparaat uitgelezen en nergens naartoe gestuurd.",
+      "shared": "De plaats en het tijdstip die je kiest, komen in het adres van de pagina te staan (bijvoorbeeld {example}), zodat je de weergave kunt bewaren of delen. Iedereen aan wie je dat adres geeft, kan die coördinaten zien."
+    },
+    "who": {
+      "heading": "Met wie je browser contact heeft",
+      "intro": "De kaart wordt rechtstreeks door OpenFreeMap geladen, dus die kan je IP-adres zien, net als bij elke andere website:",
+      "tiles": "tiles.openfreemap.org levert de kaartstijl, de tegels, de sprites en de lettertekens. Het ontvangt het gebied van de kaart dat je bekijkt.",
+      "photon": "photon.komoot.io zoekt plaatsen als je het zoekveld gebruikt. De zoektekst die je typt wordt samen met je IP-adres naar Photon gestuurd, maar pas na 3 tekens en een korte pauze. Photon wordt beheerd door komoot en gebruikt gegevens van OpenStreetMap. Coördinaten en je positie van “{locate}” worden er nooit naartoe gestuurd.",
+      "cloudflare": "Cloudflare host deze site en levert de bestanden.",
+      "local": "De stand van de zon wordt in je browser berekend. Lettertypen en pictogrammen komen van deze site, niet van een derde partij."
+    },
+    "tracking": {
+      "heading": "Tracking",
+      "body": "Er is geen tracking: geen bezoekersteller, geen advertenties en geen fingerprinting."
+    },
+    "questions": {
+      "heading": "Vragen",
+      "body": "Open een issue op {github}; de maker antwoordt daar."
+    },
+    "sky": {
+      "heading": "Hemelzicht (bèta)",
+      "camera": "De camera start pas nadat je op “{start}” tikt. Camerabeelden blijven op je apparaat: ze worden niet opgenomen, geüpload of opgeslagen en het beeld verschijnt alleen op je scherm.",
+      "sensors": "De bewegingssensoren van je apparaat (kompas en kanteling) worden op je apparaat uitgelezen om het zonnepad op het camerabeeld te leggen. Wat ze meten, wordt nergens naartoe gestuurd."
+    }
+  },
+  "terms": {
+    "title": "Voorwaarden",
+    "description": "De code valt onder de MIT-licentie. Zonstanden en schaduwen zijn schattingen. Kaartgegevens vallen onder de ODbL.",
+    "lead": "Zonkant is een gratis, opensource planner voor zon en schaduw. Zie wat je ziet als een goede schatting, niet als garantie.",
+    "code": {
+      "heading": "De code",
+      "body": "De broncode is uitgebracht onder de MIT-licentie. Je mag haar gebruiken, kopiëren en aanpassen, zolang je de licentietekst erbij houdt. Er wordt geen garantie gegeven. De volledige tekst staat in het {license}.",
+      "license": "LICENSE-bestand"
+    },
+    "estimates": {
+      "heading": "Alleen schattingen",
+      "body": "De stand en de tijden van de zon zijn berekend voor vlak terrein zonder gebouwen, bomen of heuvels en worden getoond in de tijdzone van je apparaat. Echt licht en echte schaduw kunnen daarvan afwijken. Zonkant is niet bedoeld voor veiligheidskritisch gebruik: gebruik het niet voor navigatie, luchtvaart, het dimensioneren van zonnepanelen of iets anders waarbij een fout schade kan veroorzaken.",
+      "sun": "Kijk nooit recht in de zon."
+    },
+    "mapData": {
+      "heading": "Kaartgegevens",
+      "body": "De kaartgegevens komen van OpenStreetMap-bijdragers en vallen onder de {odbl}. De kaarttegels worden door OpenFreeMap gemaakt op basis van OpenMapTiles, onder de {openFreeMapTerms} en de voorwaarden van {openMapTiles}. Op de pagina {credits} staat waarop deze site is gebouwd.",
+      "openFreeMapTerms": "voorwaarden van OpenFreeMap",
+      "credits": "Bronnen"
+    },
+    "data": {
+      "heading": "Jouw gegevens",
+      "body": "Zie de {privacy}: er wordt niets over jou verzameld.",
+      "privacy": "privacypagina"
+    },
+    "questions": {
+      "heading": "Vragen",
+      "body": "Open een issue op {github}."
+    }
+  },
+  "accessibility": {
+    "title": "Toegankelijkheid",
+    "description": "Zonkant streeft naar WCAG 2.2 niveau AA en is met het toetsenbord te bedienen.",
+    "lead": "Zonkant streeft naar WCAG 2.2 niveau AA. Iedereen moet de zonnige kant kunnen vinden.",
+    "inPlace": {
+      "heading": "Wat er geregeld is",
+      "place": "Je kunt een plaats kiezen zonder de kaart: typ de breedtegraad en lengtegraad, of gebruik “{locate}”. De tijd stel je in met een datumveld en een schuifbalk die met de pijltjestoetsen werkt.",
+      "keyboard": "Alles is met een toetsenbord te bedienen, met een dikke zichtbare focusrand en knoppen van minstens 44 pixels.",
+      "skip": "Een link bovenaan brengt je direct naar de hoofdinhoud, voorbij de kop.",
+      "contrast": "Tekst en zonlijnen hebben genoeg contrast met hun achtergrond.",
+      "readout": "De uitlezing geeft hoogte, richting, belangrijke tijden en schaduwlengte van de zon als tekst, en meldt het als de zon onder de horizon staat.",
+      "motion": "Animaties stoppen als je apparaat om minder beweging vraagt, en de kaart zoomt zonder animatie."
+    },
+    "limits": {
+      "heading": "Bekende beperkingen",
+      "body": "De kaart is een getekend canvas, dus een schermlezer kan hem niet lezen. De uitlezing bevat dezelfde informatie als de lijnen op de kaart. De tekst is beschikbaar in het Nederlands en het Engels; de kaartlabels komen van OpenStreetMap in de lokale taal."
+    },
+    "review": {
+      "heading": "Laatste controle",
+      "body": "De maker heeft deze pagina voor het laatst gecontroleerd op 3 november 2026."
+    },
+    "barrier": {
+      "heading": "Meld een drempel",
+      "body": "Werkt er iets niet voor jou? Open een issue op {github}. Vermeld welke pagina en welk hulpmiddel je gebruikte."
+    },
+    "sky": {
+      "heading": "Hemelzicht (bèta)",
+      "beta": "Hemelzicht is een bètaversie. Er kunnen nog haperingen in zitten; laat het ons weten.",
+      "alternative": "Het zonnepad wordt op een canvas getekend dat een schermlezer niet kan lezen. Dezelfde informatie staat in een tabel op die pagina: de richting en hoogte van de zon op elk heel uur, voor de gekozen datum en voor beide zonnewendes.",
+      "compass": "Het kompas van een telefoon wijkt vaak 10° of meer af, dus het getekende pad kan evenveel afwijken totdat je naar de zon wijst en kalibreert. Zie het als een ruwe richtlijn."
+    }
+  },
+  "credits": {
+    "title": "Bronnen",
+    "description": "De kaartgegevens, tegels, bibliotheken en het lettertype waarop Zonkant is gebouwd.",
+    "lead": "Zonkant is gebouwd op open data en opensourcewerk. Dank aan iedereen die daaraan heeft bijgedragen.",
+    "heading": "Kaart en code",
+    "items": {
+      "osm": "Kaartgegevens, beschikbaar onder de Open Database Licence (ODbL).",
+      "openMapTiles": "Het vectortegelschema waarmee de kaart wordt getekend.",
+      "openFreeMap": "Gratis hosting van de kaarttegels en de Positron-stijl, zonder API-sleutel.",
+      "photon": "Plaatsen zoeken, beheerd door komoot op basis van OpenStreetMap-gegevens onder de ODbL.",
+      "iana": "Waar elke tijdzone ligt, gebruikt voor het startpunt. Publiek domein.",
+      "openLayers": "De kaartbibliotheek. BSD 2-Clause-licentie.",
+      "olMapboxStyle": "Past de Positron-stijl toe in OpenLayers. BSD 2-Clause-licentie.",
+      "suncalc": "Stand en tijden van de zon, van Volodymyr Agafonkin. BSD 2-Clause-licentie.",
+      "tiktokSans": "Het lettertype, zelf gehost via Fontsource. SIL Open Font Licence 1.1.",
+      "nuxt": "Het webframework. MIT-licentie.",
+      "vue": "De UI-bibliotheek. MIT-licentie.",
+      "nuxtI18n": "Nederlandse en Engelse teksten en routes. MIT-licentie."
+    },
+    "licences": {
+      "heading": "Licentieteksten",
+      "body": "De volledige copyrightvermeldingen en licentieteksten staan in {notices}."
+    }
+  }
+}

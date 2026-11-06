@@ -1,0 +1,51 @@
+{
+  "sky": {
+    "title": "Sky view",
+    "beta": "Beta",
+    "link": "Sky view (Beta)",
+    "description": "See the sun's path over your camera view.",
+    "lead": "Hold your phone up to see where the sun travels today and on the June and December solstices.",
+    "back": "Back to the map",
+    "start": "Start camera",
+    "retry": "Try again",
+    "stageLabel": "Camera view with the sun path drawn over it",
+    "status": {
+      "idle": "Sky view works on a phone or tablet with a camera and a compass. Tap \"{start}\" to begin. The table below works on any device.",
+      "requesting": "Waiting for permission for the camera and compass…",
+      "ready": "Camera and compass are on. The lines follow where you point your phone.",
+      "denied": "Zonkant has no access to the camera or compass. Allow access in your browser settings, then try again.",
+      "unsupported": "This device or browser cannot open a camera or compass. The table below has the sun's direction and height.",
+      "insecure": "The camera only works on a secure (https) page.",
+      "noSensor": "No compass found. The camera is on, but the lines cannot be placed. Try a phone or tablet."
+    },
+    "controls": {
+      "label": "Calibration and view",
+      "warning": "Compass may be off by 10° or more. Point at the sun and tap Calibrate.",
+      "calibrate": "Calibrate",
+      "belowHorizon": "The sun is below the horizon, so there is nothing to point at.",
+      "waiting": "Waiting for the compass.",
+      "calibrated": "Calibrated on the sun. Use the buttons to fine-tune.",
+      "headingMinus": "Heading -1°",
+      "headingPlus": "Heading +1°",
+      "offset": "Heading correction: {degrees}",
+      "reset": "Reset calibration",
+      "fov": "Field of view"
+    },
+    "table": {
+      "heading": "Sun times as a table",
+      "caption": "Direction and height of the sun at every full hour while it is up",
+      "day": "Day",
+      "time": "Time",
+      "direction": "Direction",
+      "height": "Height",
+      "selected": "Selected date: {date}",
+      "june": "June solstice: {date}",
+      "december": "December solstice: {date}"
+    },
+    "canvas": {
+      "selected": "Selected",
+      "june": "21 June",
+      "december": "21 December"
+    }
+  }
+}

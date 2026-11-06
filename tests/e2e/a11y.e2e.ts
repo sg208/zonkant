@@ -1,7 +1,13 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-for (const path of ['/', '/privacy', '/terms', '/accessibility', '/credits']) {
+for (const path of [
+  '/en/',
+  '/en/privacy',
+  '/en/terms',
+  '/en/accessibility',
+  '/en/credits',
+]) {
   test(`${path} has no serious or critical axe violations`, async ({
     page,
   }) => {
@@ -9,7 +15,7 @@ for (const path of ['/', '/privacy', '/terms', '/accessibility', '/credits']) {
     await expect(
       page.getByRole('heading', { level: 1 }).first()
     ).toBeAttached();
-    if (path === '/') {
+    if (path === '/en/') {
       // The toggle only exists on the mobile sheet; the desktop panel is always open
       const toggle = page.getByRole('button', { name: 'More' });
       if (await toggle.isVisible()) await toggle.click();

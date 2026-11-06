@@ -7,19 +7,22 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const { t, locale } = useI18n();
+const localePath = useLocalePath();
+
 const statusCode = computed(() => props.error?.statusCode ?? 500);
 const isNotFound = computed(() => statusCode.value === 404);
 const title = computed(() =>
-  isNotFound.value ? 'Page not found' : 'Page error'
+  isNotFound.value ? t('error.notFoundTitle') : t('error.failedTitle')
 );
 const body = computed(() =>
   isNotFound.value
-    ? 'There is no page at this address. It may have moved, or the name may be wrong.'
-    : `The page could not load (error ${statusCode.value}). Try again in a moment.`
+    ? t('error.notFoundBody')
+    : t('error.failedBody', { code: statusCode.value })
 );
 
 useHead({
-  htmlAttrs: { lang: 'en' },
+  htmlAttrs: { lang: locale },
   title: computed(() => `${title.value} - Zonkant`),
   meta: [{ name: 'robots', content: 'noindex' }],
 });
@@ -31,7 +34,9 @@ useHead({
       <h1 class="error-page__title">{{ title }}</h1>
       <div>
         <p class="error-page__body">{{ body }}</p>
-        <a href="/" class="error-page__home">Back to the sun planner</a>
+        <a :href="localePath('/')" class="error-page__home">{{
+          t('error.home')
+        }}</a>
       </div>
     </section>
   </NuxtLayout>

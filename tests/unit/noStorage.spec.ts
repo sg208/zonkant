@@ -11,6 +11,7 @@ const sourceDirs = [
   'utils',
   'types',
   'plugins',
+  'i18n',
 ];
 const sourceFiles = ['app.vue', 'error.vue', 'app.config.ts'];
 const forbidden =
@@ -34,6 +35,7 @@ describe('no storage or logging in source', () => {
   it('scans real source files', () => {
     expect(files).toContain('pages/privacy.vue');
     expect(files).toContain('components/AppFooter.vue');
+    expect(files).toContain('i18n/locales/nl/app.json');
   });
 
   it('matches every forbidden API (guards the scan below)', () => {

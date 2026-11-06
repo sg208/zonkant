@@ -18,6 +18,8 @@ export default defineVitestConfig({
         domEnvironment: 'happy-dom',
         overrides: {
           ssr: false,
+          // Existing component tests assert English; production default is nl
+          i18n: { defaultLocale: 'en' },
         },
       },
     },

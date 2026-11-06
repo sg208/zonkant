@@ -1,60 +1,66 @@
 <script setup lang="ts">
+const { t } = useI18n();
+const localePath = useLocalePath();
 const { repoUrl } = useAppConfig();
 const issuesUrl = `${repoUrl}/issues`;
 
 useHead({
-  title: 'Terms - Zonkant',
+  title: computed(() => `${t('terms.title')} - Zonkant`),
   meta: [
-    {
-      name: 'description',
-      content:
-        'The code is MIT licensed. Sun times and shadows are estimates. Map data is ODbL.',
-    },
+    { name: 'description', content: computed(() => t('terms.description')) },
   ],
 });
 </script>
 
 <template>
-  <LegalPage
-    title="Terms"
-    lead="Zonkant is a free, open-source sun and shadow planner. Treat what it shows as a good estimate, not a guarantee."
-  >
-    <h2>The code</h2>
-    <p>
-      The source code is released under the MIT licence. You may use, copy and
-      change it, as long as you keep the licence notice. It comes with no
-      warranty. The full text is in the
-      <a :href="`${repoUrl}/blob/main/LICENSE`">LICENSE file</a>.
-    </p>
+  <LegalPage :title="t('terms.title')" :lead="t('terms.lead')">
+    <h2>{{ t('terms.code.heading') }}</h2>
+    <i18n-t keypath="terms.code.body" tag="p">
+      <template #license>
+        <a :href="`${repoUrl}/blob/main/LICENSE`">{{
+          t('terms.code.license')
+        }}</a>
+      </template>
+    </i18n-t>
 
-    <h2>Estimates only</h2>
-    <p>
-      Sun positions and times are calculated for flat ground with no buildings,
-      trees or hills, and are shown in your device's time zone. Real light and
-      shade will differ. Zonkant is not safety-critical: do not use it for
-      navigation, aviation, solar installation sizing or anything else where an
-      error could cause harm.
-    </p>
-    <p>Never look straight at the sun.</p>
+    <h2>{{ t('terms.estimates.heading') }}</h2>
+    <p>{{ t('terms.estimates.body') }}</p>
+    <p>{{ t('terms.estimates.sun') }}</p>
 
-    <h2>Map data</h2>
-    <p>
-      Map data is from OpenStreetMap contributors under the
-      <a href="https://www.openstreetmap.org/copyright">ODbL</a>. Map tiles are
-      made by OpenFreeMap from OpenMapTiles, under the
-      <a href="https://openfreemap.org/tos/">OpenFreeMap terms</a> and the
-      <a href="https://www.openmaptiles.org/">OpenMapTiles</a> terms. See the
-      <NuxtLink to="/credits">credits</NuxtLink> for everything this site is
-      built on.
-    </p>
+    <h2>{{ t('terms.mapData.heading') }}</h2>
+    <i18n-t keypath="terms.mapData.body" tag="p">
+      <template #odbl>
+        <a href="https://www.openstreetmap.org/copyright">ODbL</a>
+      </template>
+      <template #openFreeMapTerms>
+        <a href="https://openfreemap.org/tos/">{{
+          t('terms.mapData.openFreeMapTerms')
+        }}</a>
+      </template>
+      <template #openMapTiles>
+        <a href="https://www.openmaptiles.org/">OpenMapTiles</a>
+      </template>
+      <template #credits>
+        <NuxtLink :to="localePath('/credits')">{{
+          t('terms.mapData.credits')
+        }}</NuxtLink>
+      </template>
+    </i18n-t>
 
-    <h2>Your data</h2>
-    <p>
-      See the <NuxtLink to="/privacy">privacy page</NuxtLink>: nothing about you
-      is collected.
-    </p>
+    <h2>{{ t('terms.data.heading') }}</h2>
+    <i18n-t keypath="terms.data.body" tag="p">
+      <template #privacy>
+        <NuxtLink :to="localePath('/privacy')">{{
+          t('terms.data.privacy')
+        }}</NuxtLink>
+      </template>
+    </i18n-t>
 
-    <h2>Questions</h2>
-    <p>Open an issue on <a :href="issuesUrl">GitHub</a>.</p>
+    <h2>{{ t('terms.questions.heading') }}</h2>
+    <i18n-t keypath="terms.questions.body" tag="p">
+      <template #github>
+        <a :href="issuesUrl">GitHub</a>
+      </template>
+    </i18n-t>
   </LegalPage>
 </template>

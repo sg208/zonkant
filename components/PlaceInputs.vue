@@ -5,19 +5,17 @@ import type { GeolocationState } from '~/composables/useGeolocation';
 const props = defineProps<LatLon>();
 const emit = defineEmits<{ update: [place: LatLon] }>();
 
+const { t } = useI18n();
 const id = useId();
 const { state: geoState, coords, locate } = useGeolocation();
 
-const GEO_MESSAGES: Record<GeolocationState, string> = {
+const GEO_MESSAGE_KEYS: Record<GeolocationState, string> = {
   idle: '',
-  pending: 'Finding your location...',
-  granted: 'Location found. It stays on this device.',
-  denied:
-    'Location permission was denied. You can still type coordinates or tap the map.',
-  unsupported:
-    'This browser cannot share its location. Type coordinates or tap the map.',
-  error:
-    'Could not get your location. Try again, type coordinates or tap the map.',
+  pending: 'place.geo.pending',
+  granted: 'place.geo.granted',
+  denied: 'place.geo.denied',
+  unsupported: 'place.geo.unsupported',
+  error: 'place.geo.error',
 };
 
 const show = (value: number): string => String(Number(value.toFixed(5)));
@@ -28,18 +26,18 @@ const lonError = ref('');
 
 const check = (draft: string, limit: number, label: string): string => {
   if (draft.trim() === '' || Number.isNaN(Number(draft)))
-    return 'Enter a number';
+    return t('place.enterNumber');
   return Math.abs(Number(draft)) <= limit
     ? ''
-    : `${label} must be between -${limit} and ${limit}`;
+    : t('place.outOfRange', { label, limit });
 };
 
 const handleInput = (event: Event): void => {
   const input = event.target as HTMLInputElement;
   if (input.name === 'lat') draftLat.value = input.value;
   else draftLon.value = input.value;
-  latError.value = check(draftLat.value, 90, 'Latitude');
-  lonError.value = check(draftLon.value, 180, 'Longitude');
+  latError.value = check(draftLat.value, 90, t('place.latitude'));
+  lonError.value = check(draftLon.value, 180, t('place.longitude'));
   if (!latError.value && !lonError.value) {
     emit('update', {
       lat: Number(draftLat.value),
@@ -68,13 +66,16 @@ watch(coords, (place) => {
   emit('update', place);
 });
 
-const geoMessage = computed(() => GEO_MESSAGES[geoState.value]);
+const geoMessage = computed(() => {
+  const key = GEO_MESSAGE_KEYS[geoState.value];
+  return key ? t(key) : '';
+});
 </script>
 
 <template>
   <form class="place" novalidate @submit.prevent>
     <div class="place__field">
-      <label :for="`${id}-lat`">Latitude</label>
+      <label :for="`${id}-lat`">{{ t('place.latitude') }}</label>
       <input
         :id="`${id}-lat`"
         :value="draftLat"
@@ -88,7 +89,7 @@ const geoMessage = computed(() => GEO_MESSAGES[geoState.value]);
       />
     </div>
     <div class="place__field">
-      <label :for="`${id}-lon`">Longitude</label>
+      <label :for="`${id}-lon`">{{ t('place.longitude') }}</label>
       <input
         :id="`${id}-lon`"
         :value="draftLon"
@@ -102,7 +103,7 @@ const geoMessage = computed(() => GEO_MESSAGES[geoState.value]);
       />
     </div>
     <button type="button" class="place__locate" @click="locate">
-      Locate me
+      {{ t('place.locate') }}
     </button>
     <div class="place__messages" role="status">
       <p v-if="latError" :id="`${id}-lat-error`" class="place__error">
@@ -114,7 +115,7 @@ const geoMessage = computed(() => GEO_MESSAGES[geoState.value]);
       <p v-if="geoMessage">{{ geoMessage }}</p>
     </div>
     <p class="place__hint">
-      Your location stays on this device and is never sent anywhere.
+      {{ t('place.hint') }}
     </p>
   </form>
 </template>

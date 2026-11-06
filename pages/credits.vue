@@ -1,97 +1,90 @@
 <script setup lang="ts">
+const { t } = useI18n();
+
 useHead({
-  title: 'Credits - Zonkant',
+  title: computed(() => `${t('credits.title')} - Zonkant`),
   meta: [
-    {
-      name: 'description',
-      content:
-        'The map data, tiles, libraries and font that Zonkant is built on.',
-    },
+    { name: 'description', content: computed(() => t('credits.description')) },
   ],
 });
 
 interface Credit {
   name: string;
   href: string;
-  note: string;
+  noteKey: string;
 }
 
 const credits: Credit[] = [
   {
     name: 'OpenStreetMap contributors',
     href: 'https://www.openstreetmap.org/copyright',
-    note: 'Map data, available under the Open Database Licence (ODbL).',
+    noteKey: 'osm',
   },
   {
     name: 'OpenMapTiles',
     href: 'https://www.openmaptiles.org/',
-    note: 'The vector tile schema the map is drawn from.',
+    noteKey: 'openMapTiles',
   },
   {
     name: 'OpenFreeMap',
     href: 'https://openfreemap.org',
-    note: 'Free hosting of the map tiles and the Positron style, without an API key.',
+    noteKey: 'openFreeMap',
   },
   {
     name: 'Photon',
     href: 'https://photon.komoot.io',
-    note: 'Place search, run by komoot on OpenStreetMap data under the ODbL.',
+    noteKey: 'photon',
   },
   {
     name: 'IANA Time Zone Database',
     href: 'https://www.iana.org/time-zones',
-    note: 'Where each time zone sits, used for the starting point. Public domain.',
+    noteKey: 'iana',
   },
   {
     name: 'OpenLayers',
     href: 'https://openlayers.org/',
-    note: 'The map library. BSD 2-Clause licence.',
+    noteKey: 'openLayers',
   },
   {
     name: 'ol-mapbox-style',
     href: 'https://github.com/openlayers/ol-mapbox-style',
-    note: 'Applies the Positron style to OpenLayers. BSD 2-Clause licence.',
+    noteKey: 'olMapboxStyle',
   },
   {
     name: 'suncalc',
     href: 'https://github.com/mourner/suncalc',
-    note: 'Sun position and times, by Volodymyr Agafonkin. BSD 2-Clause licence.',
+    noteKey: 'suncalc',
   },
   {
     name: 'TikTok Sans',
     href: 'https://github.com/tiktok/TikTokSans',
-    note: 'The typeface, self-hosted through Fontsource. SIL Open Font Licence 1.1.',
+    noteKey: 'tiktokSans',
   },
+  { name: 'Nuxt', href: 'https://nuxt.com', noteKey: 'nuxt' },
+  { name: 'Vue', href: 'https://vuejs.org', noteKey: 'vue' },
   {
-    name: 'Nuxt',
-    href: 'https://nuxt.com',
-    note: 'The web framework. MIT licence.',
-  },
-  {
-    name: 'Vue',
-    href: 'https://vuejs.org',
-    note: 'The UI library. MIT licence.',
+    name: 'Nuxt I18n',
+    href: 'https://i18n.nuxtjs.org',
+    noteKey: 'nuxtI18n',
   },
 ];
 </script>
 
 <template>
-  <LegalPage
-    title="Credits"
-    lead="Zonkant stands on open data and open-source work. Thank you to everyone behind it."
-  >
-    <h2>Map and code</h2>
+  <LegalPage :title="t('credits.title')" :lead="t('credits.lead')">
+    <h2>{{ t('credits.heading') }}</h2>
     <ul class="credits">
       <li v-for="credit in credits" :key="credit.name" class="credit">
         <a :href="credit.href">{{ credit.name }}</a
-        >. {{ credit.note }}
+        >. {{ t(`credits.items.${credit.noteKey}`) }}
       </li>
     </ul>
 
-    <h2>Licence texts</h2>
-    <p>
-      The full copyright notices and licence texts are in
-      <a href="/THIRD-PARTY-NOTICES.txt">THIRD-PARTY-NOTICES.txt</a>.
-    </p>
+    <h2>{{ t('credits.licences.heading') }}</h2>
+    <i18n-t keypath="credits.licences.body" tag="p">
+      <template #notices>
+        <a href="/THIRD-PARTY-NOTICES.txt">THIRD-PARTY-NOTICES.txt</a>
+      </template>
+    </i18n-t>
   </LegalPage>
 </template>

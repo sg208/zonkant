@@ -29,9 +29,10 @@ Requirements:
 
 ## Headers
 
-`public/_headers` sets HSTS, nosniff, a referrer policy, `X-Frame-Options: DENY`, a Permissions-Policy and a Content-Security-Policy in Report-Only mode. Two choices differ from the pokedex project:
+`public/_headers` sets HSTS, nosniff, a referrer policy, `X-Frame-Options: DENY`, a Permissions-Policy and a Content-Security-Policy in Report-Only mode. Three choices differ from the pokedex project:
 
 - `geolocation=(self)`, because "Locate me" needs the browser location prompt.
+- `camera=(self)`, `accelerometer=(self)`, `gyroscope=(self)` and `magnetometer=(self)`, because the Sky view (Beta) shows the rear camera and reads the orientation sensors. `microphone=()` stays closed and nothing is allowed for other origins (never `*`).
 - The CSP allows `https://tiles.openfreemap.org` for images and fetches, `https://photon.komoot.io` for fetches only (place search), and `worker-src 'self' blob:` for the map's tile workers.
 
 The CSP is Report-Only on purpose. Before enforcing it, run `pnpm exec wrangler dev` on the built output, load `/`, use the map and read the browser console for violations. `npx serve` does not deliver `_headers`.

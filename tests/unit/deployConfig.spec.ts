@@ -71,11 +71,15 @@ describe('public/_headers', () => {
     expect(all['referrer-policy']).toBeTruthy();
   });
 
-  it('allows geolocation for this site only', () => {
+  it('allows geolocation, camera and motion sensors for this site only', () => {
     const policy = all['permissions-policy'] ?? '';
     expect(policy).toContain('geolocation=(self)');
-    expect(policy).toContain('camera=()');
+    expect(policy).toContain('camera=(self)');
+    expect(policy).toContain('accelerometer=(self)');
+    expect(policy).toContain('gyroscope=(self)');
+    expect(policy).toContain('magnetometer=(self)');
     expect(policy).toContain('microphone=()');
+    expect(policy).not.toMatch(/=\*/);
   });
 
   it('reports CSP, never enforces it, and allows only the tile and Photon hosts', () => {

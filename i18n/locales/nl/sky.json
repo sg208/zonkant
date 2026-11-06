@@ -1,0 +1,51 @@
+{
+  "sky": {
+    "title": "Hemelzicht",
+    "beta": "Bèta",
+    "link": "Hemelzicht (bèta)",
+    "description": "Zie het pad van de zon over het beeld van je camera.",
+    "lead": "Houd je telefoon omhoog en zie waar de zon vandaag en op de zonnewendes van juni en december langs trekt.",
+    "back": "Terug naar de kaart",
+    "start": "Camera starten",
+    "retry": "Opnieuw proberen",
+    "stageLabel": "Camerabeeld met het zonnepad erover",
+    "status": {
+      "idle": "Hemelzicht werkt op een telefoon of tablet met camera en kompas. Tik op “{start}” om te beginnen. De tabel hieronder werkt op elk apparaat.",
+      "requesting": "Wachten op toestemming voor de camera en het kompas…",
+      "ready": "Camera en kompas staan aan. De lijnen volgen waar je je telefoon op richt.",
+      "denied": "Zonkant heeft geen toegang tot de camera of het kompas. Sta toegang toe in de instellingen van je browser en probeer het opnieuw.",
+      "unsupported": "Dit apparaat of deze browser kan geen camera of kompas openen. In de tabel hieronder staan de richting en hoogte van de zon.",
+      "insecure": "De camera werkt alleen op een beveiligde pagina (https).",
+      "noSensor": "Geen kompas gevonden. De camera staat aan, maar de lijnen kunnen niet worden geplaatst. Probeer een telefoon of tablet."
+    },
+    "controls": {
+      "label": "Kalibratie en weergave",
+      "warning": "Het kompas kan 10° of meer afwijken. Richt op de zon en tik op Kalibreren.",
+      "calibrate": "Kalibreren",
+      "belowHorizon": "De zon staat onder de horizon, dus er is niets om op te richten.",
+      "waiting": "Wachten op het kompas.",
+      "calibrated": "Gekalibreerd op de zon. Stel bij met de knoppen.",
+      "headingMinus": "Richting -1°",
+      "headingPlus": "Richting +1°",
+      "offset": "Richtingscorrectie: {degrees}",
+      "reset": "Kalibratie herstellen",
+      "fov": "Gezichtsveld"
+    },
+    "table": {
+      "heading": "Zonnestanden in een tabel",
+      "caption": "Richting en hoogte van de zon op elk heel uur, zolang de zon op is",
+      "day": "Dag",
+      "time": "Tijd",
+      "direction": "Richting",
+      "height": "Hoogte",
+      "selected": "Gekozen datum: {date}",
+      "june": "Zonnewende juni: {date}",
+      "december": "Zonnewende december: {date}"
+    },
+    "canvas": {
+      "selected": "Gekozen",
+      "june": "21 juni",
+      "december": "21 december"
+    }
+  }
+}

@@ -5,6 +5,7 @@ const STEP_MIN = 5;
 const date = defineModel<string>('date', { required: true });
 const time = defineModel<string>('time', { required: true });
 
+const { t } = useI18n();
 const id = useId();
 const sliderId = `${id}-time`;
 const dateId = `${id}-date`;
@@ -38,7 +39,7 @@ const handleNow = (): void => {
   <div class="time-controls">
     <div class="time-controls__slider">
       <label :for="sliderId"
-        >Time <strong>{{ time }}</strong></label
+        >{{ t('time.time') }} <strong>{{ time }}</strong></label
       >
       <input
         :id="sliderId"
@@ -53,11 +54,11 @@ const handleNow = (): void => {
     </div>
     <div class="time-controls__row">
       <div class="time-controls__date">
-        <label :for="dateId">Date</label>
+        <label :for="dateId">{{ t('time.date') }}</label>
         <input :id="dateId" type="date" :value="date" @change="handleDate" />
       </div>
       <button type="button" class="time-controls__now" @click="handleNow">
-        Now
+        {{ t('time.now') }}
       </button>
     </div>
   </div>
