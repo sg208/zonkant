@@ -46,6 +46,7 @@ const orientation = useDeviceOrientation();
 const camera = useCameraStream();
 
 const stageEl = ref<HTMLElement | null>(null);
+const sectionEl = ref<HTMLElement | null>(null);
 const statusEl = ref<HTMLElement | null>(null);
 const videoEl = ref<HTMLVideoElement | null>(null);
 const canvasEl = ref<HTMLCanvasElement | null>(null);
@@ -291,16 +292,6 @@ watch(
   { flush: 'post' }
 );
 
-// A blocked sensor leaves the camera streaming with nothing to draw on it
-watch(
-  () => orientation.status.value,
-  (sensorStatus) => {
-    if (sensorStatus === 'denied' || sensorStatus === 'no-sensor') {
-      camera.stop();
-    }
-  }
-);
-
 // The Start/Retry button unmounts the moment the status changes, which drops
 // focus on <body>; hand it to the status line, the element that replaces it
 const focusStatus = (): void => {
@@ -319,6 +310,27 @@ const handleRetry = (): void => {
   camera.stop();
   handleStart();
 };
+
+// The camera is only useful while the sensor works: a blocked sensor would
+// leave it streaming with no overlay, so the stage and controls go with it
+const BLOCKED_SENSOR_STATUSES: SkyAccessStatus[] = [
+  'denied',
+  'no-sensor',
+  'unsupported',
+];
+
+// Stopping the camera unmounts the stage and SkyControls; focus sitting inside
+// them would fall on <body>, so it moves to the status line instead
+watch(
+  () => orientation.status.value,
+  (sensorStatus) => {
+    if (!BLOCKED_SENSOR_STATUSES.includes(sensorStatus)) return;
+    const isFocusInside =
+      sectionEl.value?.contains(document.activeElement) ?? false;
+    camera.stop();
+    if (isFocusInside) focusStatus();
+  }
+);
 
 const handleCalibrate = (): void => {
   const raw = orientation.reading.value;
@@ -365,7 +377,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="sky-canvas" :data-calibrated="isCalibrated">
+  <section ref="sectionEl" class="sky-canvas" :data-calibrated="isCalibrated">
     <p ref="statusEl" class="sky-canvas__status" role="status" tabindex="-1">
       {{ statusText }}
     </p>
