@@ -2,12 +2,26 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { effectScope } from 'vue';
 import { useCameraStream } from '~/composables/useCameraStream';
 
-const fakeStream = (): { stream: MediaStream; stopTrack: () => void } => {
+const fakeStream = (): {
+  stream: MediaStream;
+  stopTrack: () => void;
+  emitEnded: () => void;
+} => {
   const stopTrack = vi.fn();
+  const listeners: Record<string, (() => void)[]> = {};
+  const track = {
+    stop: stopTrack,
+    addEventListener: (type: string, listener: () => void): void => {
+      (listeners[type] ??= []).push(listener);
+    },
+  };
   const stream = {
-    getTracks: () => [{ stop: stopTrack }],
+    getTracks: () => [track],
   } as unknown as MediaStream;
-  return { stream, stopTrack };
+  const emitEnded = (): void => {
+    for (const listener of listeners.ended ?? []) listener();
+  };
+  return { stream, stopTrack, emitEnded };
 };
 
 const stubGetUserMedia = (
@@ -82,6 +96,15 @@ describe('useCameraStream', () => {
     expect(status.value).toBe('unsupported');
   });
 
+  it('reports busy when another app holds the camera, so it can be retried', async () => {
+    stubGetUserMedia(async () => {
+      throw domError('NotReadableError');
+    });
+    const { status, start } = useCameraStream();
+    await start();
+    expect(status.value).toBe('busy');
+  });
+
   it('reports insecure outside a secure context, without asking', async () => {
     vi.stubGlobal('isSecureContext', false);
     const spy = stubGetUserMedia(async () => fakeStream().stream);
@@ -89,6 +112,17 @@ describe('useCameraStream', () => {
     await start();
     expect(status.value).toBe('insecure');
     expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('drops to idle when the system ends the track', async () => {
+    const { stream: mediaStream, emitEnded } = fakeStream();
+    stubGetUserMedia(async () => mediaStream);
+    const { status, stream, start } = useCameraStream();
+    await start();
+    expect(status.value).toBe('granted');
+    emitEnded();
+    expect(status.value).toBe('idle');
+    expect(stream.value).toBeNull();
   });
 
   it('stop() stops every track and clears the stream', async () => {

@@ -30,4 +30,19 @@ describe('zoneCoords', () => {
     expect(zoneCoords['Europe/Oslo']![0]).toBeCloseTo(59.92, 1);
     expect(zoneCoords['Africa/Accra']![0]).toBeCloseTo(5.55, 1);
   });
+
+  // tzdata links these backward-merged ids to a neighbouring country's zone;
+  // the start place must stay on the id's own city
+  it('keeps legacy ids on their own city instead of the link target', () => {
+    expect(zoneCoords['Africa/Asmera']).toEqual(zoneCoords['Africa/Asmara']);
+    expect(zoneCoords['Pacific/Ponape']).toEqual(zoneCoords['Pacific/Pohnpei']);
+    expect(zoneCoords['Pacific/Truk']).toEqual(zoneCoords['Pacific/Chuuk']);
+    expect(zoneCoords['Pacific/Yap']).toEqual(zoneCoords['Pacific/Chuuk']);
+    expect(zoneCoords['Africa/Asmera']).not.toEqual(
+      zoneCoords['Africa/Nairobi']
+    );
+    expect(zoneCoords['Pacific/Truk']).not.toEqual(
+      zoneCoords['Pacific/Port_Moresby']
+    );
+  });
 });

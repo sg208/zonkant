@@ -75,6 +75,21 @@ describe('SkyControls', () => {
     expect(label.text()).toBe('Field of view');
   });
 
+  it('announces calibration state and offset through persistent live regions', async () => {
+    const wrapper = await mountSuspended(SkyControls, { props: PROPS });
+    const messageBefore = wrapper.get('.controls__message').element;
+    expect(wrapper.get('.controls__message').attributes('role')).toBe('status');
+    expect(wrapper.get('.controls__note[aria-live="polite"]').text()).toContain(
+      'Heading correction'
+    );
+    // WHY: a v-if swap replaced the node, so the status change never reached a screen reader
+    await wrapper.setProps({ isCalibrated: true });
+    expect(wrapper.get('.controls__message').element).toBe(messageBefore);
+    expect(wrapper.get('.controls__message').text()).toContain(
+      'Calibrated on the sun'
+    );
+  });
+
   it('has Dutch names and warning', async () => {
     const wrapper = await mountSuspended(SkyControls, {
       props: { ...PROPS, headingOffsetDeg: 1.5 },

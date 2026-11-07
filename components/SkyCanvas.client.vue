@@ -46,6 +46,7 @@ const orientation = useDeviceOrientation();
 const camera = useCameraStream();
 
 const stageEl = ref<HTMLElement | null>(null);
+const statusEl = ref<HTMLElement | null>(null);
 const videoEl = ref<HTMLVideoElement | null>(null);
 const canvasEl = ref<HTMLCanvasElement | null>(null);
 const offsets = ref<CalibrationOffsets>(resetCalibration());
@@ -56,8 +57,13 @@ const now = ref(new Date());
 const displayStatus = computed<SkyAccessStatus>(() => {
   const cameraStatus = camera.status.value;
   const sensorStatus = orientation.status.value;
-  for (const blocked of ['denied', 'insecure', 'unsupported'] as const) {
-    if (cameraStatus === blocked || sensorStatus === blocked) return blocked;
+  for (const terminal of [
+    'denied',
+    'insecure',
+    'unsupported',
+    'busy',
+  ] as const) {
+    if (cameraStatus === terminal || sensorStatus === terminal) return terminal;
   }
   if (sensorStatus === 'no-sensor') return 'no-sensor';
   if (cameraStatus === 'requesting' || sensorStatus === 'requesting')
@@ -72,6 +78,7 @@ const STATUS_KEYS: Record<SkyAccessStatus, string> = {
   requesting: 'requesting',
   granted: 'ready',
   denied: 'denied',
+  busy: 'busy',
   unsupported: 'unsupported',
   insecure: 'insecure',
   'no-sensor': 'noSensor',
@@ -83,7 +90,7 @@ const statusText = computed(() =>
 );
 const isCameraOn = computed(() => camera.status.value === 'granted');
 const canRetry = computed(() =>
-  ['denied', 'no-sensor'].includes(displayStatus.value)
+  ['denied', 'no-sensor', 'busy'].includes(displayStatus.value)
 );
 const showsStartButton = computed(
   () => displayStatus.value === 'idle' || canRetry.value
@@ -284,10 +291,27 @@ watch(
   { flush: 'post' }
 );
 
+// A blocked sensor leaves the camera streaming with nothing to draw on it
+watch(
+  () => orientation.status.value,
+  (sensorStatus) => {
+    if (sensorStatus === 'denied' || sensorStatus === 'no-sensor') {
+      camera.stop();
+    }
+  }
+);
+
+// The Start/Retry button unmounts the moment the status changes, which drops
+// focus on <body>; hand it to the status line, the element that replaces it
+const focusStatus = (): void => {
+  void nextTick(() => statusEl.value?.focus());
+};
+
 const handleStart = (): void => {
   // Both calls run inside the tap: iOS only shows its sensor prompt there
   void orientation.start();
   void camera.start();
+  focusStatus();
 };
 
 const handleRetry = (): void => {
@@ -342,7 +366,9 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="sky-canvas" :data-calibrated="isCalibrated">
-    <p class="sky-canvas__status" role="status">{{ statusText }}</p>
+    <p ref="statusEl" class="sky-canvas__status" role="status" tabindex="-1">
+      {{ statusText }}
+    </p>
     <button
       v-if="showsStartButton"
       type="button"

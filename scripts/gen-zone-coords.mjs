@@ -38,6 +38,19 @@ for (const line of readFileSync(tzdataPath, 'utf8').split('\n')) {
     coords[alias] = coords[target];
 }
 
+// WHY: tzdata links these backward-merged ids to a neighbouring country's zone
+// (Asmera -> Nairobi, Ponape -> Guadalcanal, Truk/Yap -> Port Moresby), which
+// would start those users 1000+ km away; ICU/CLDR still report the old ids
+const ALIAS_OVERRIDES = {
+  'Africa/Asmera': 'Africa/Asmara',
+  'Pacific/Ponape': 'Pacific/Pohnpei',
+  'Pacific/Truk': 'Pacific/Chuuk',
+  'Pacific/Yap': 'Pacific/Chuuk',
+};
+for (const [alias, target] of Object.entries(ALIAS_OVERRIDES)) {
+  if (coords[target]) coords[alias] = coords[target];
+}
+
 const body = Object.keys(coords)
   .sort()
   .map((zone) => `  '${zone}': [${coords[zone].join(', ')}],`)

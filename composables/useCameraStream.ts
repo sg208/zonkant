@@ -4,6 +4,8 @@ import type { SkyAccessStatus } from '~/types/sky';
 type CameraStatus = Exclude<SkyAccessStatus, 'no-sensor'>;
 
 const DENIED_ERROR_NAMES = ['NotAllowedError', 'SecurityError'];
+// Another app holds the device or the request was cut short: both clear on retry
+const TRANSIENT_ERROR_NAMES = ['NotReadableError', 'AbortError'];
 
 // Frames stay in the <video> element: nothing here reads, records or sends them.
 export const useCameraStream = (): {
@@ -50,12 +52,25 @@ export const useCameraStream = (): {
       }
       stream.value = mediaStream;
       status.value = 'granted';
+      // The system can take the camera away mid-run (another app, a device
+      // switch); a frozen frame must not keep reporting granted
+      for (const track of mediaStream.getTracks()) {
+        track.addEventListener('ended', () => {
+          if (thisRunId !== runId) return;
+          stream.value = null;
+          status.value = 'idle';
+        });
+      }
     } catch (error) {
       if (thisRunId !== runId) return;
       const errorName = error instanceof Error ? error.name : '';
-      status.value = DENIED_ERROR_NAMES.includes(errorName)
-        ? 'denied'
-        : 'unsupported';
+      if (DENIED_ERROR_NAMES.includes(errorName)) {
+        status.value = 'denied';
+      } else if (TRANSIENT_ERROR_NAMES.includes(errorName)) {
+        status.value = 'busy';
+      } else {
+        status.value = 'unsupported';
+      }
     }
   };
 

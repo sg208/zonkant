@@ -47,16 +47,19 @@ export const useDeviceOrientation = (): {
   let noSensorTimer: ReturnType<typeof setTimeout> | undefined;
   let hasAbsoluteEvents = false;
 
-  const acceptInput = (input: OrientationInput): void => {
-    if (!normaliseOrientation(input, screenAngle.value)) return;
+  // Returns true only when the reading validated, so callers can tell a real
+  // sensor sample from a device that fires events with null angles forever
+  const acceptInput = (input: OrientationInput): boolean => {
+    if (!normaliseOrientation(input, screenAngle.value)) return false;
     latestInput.value = input;
     clearTimeout(noSensorTimer);
     status.value = 'granted';
+    return true;
   };
 
   const handleAbsoluteOrientation = (event: Event): void => {
-    hasAbsoluteEvents = true;
-    acceptInput(toInput(event as IosOrientationEvent));
+    const isAccepted = acceptInput(toInput(event as IosOrientationEvent));
+    if (isAccepted) hasAbsoluteEvents = true;
   };
 
   // Chrome fires both events; once the absolute one works the relative one is noise

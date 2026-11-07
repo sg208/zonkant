@@ -113,6 +113,22 @@ describe('useDeviceOrientation statuses', () => {
     vi.advanceTimersByTime(NO_SENSOR_TIMEOUT_MS);
     expect(status.value).toBe('no-sensor');
   });
+
+  // A desktop Chrome fires deviceorientationabsolute with null angles forever;
+  // that must not mute the relative events that do carry a reading
+  it('still accepts relative events after an absolute event with null angles', async () => {
+    const { status, reading, start } = useDeviceOrientation();
+    await start();
+    sendOrientation('deviceorientationabsolute', {
+      absolute: true,
+      alpha: null,
+      beta: null,
+      gamma: null,
+    });
+    sendOrientation('deviceorientation', { absolute: false, alpha: 10 });
+    expect(status.value).toBe('granted');
+    expect(reading.value).not.toBeNull();
+  });
 });
 
 describe('useDeviceOrientation permission', () => {

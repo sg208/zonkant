@@ -32,10 +32,17 @@ const offsetText = computed(() => {
 
 <template>
   <div class="controls" role="group" :aria-label="t('sky.controls.label')">
-    <p v-if="!isCalibrated" class="controls__message controls__message--warn">
-      {{ t('sky.controls.warning') }}
+    <!-- ONE persistent element: swapping v-if/v-else replaced the node and the
+         status change never reached a screen reader -->
+    <p
+      class="controls__message"
+      :class="{ 'controls__message--warn': !isCalibrated }"
+      role="status"
+    >
+      {{
+        isCalibrated ? t('sky.controls.calibrated') : t('sky.controls.warning')
+      }}
     </p>
-    <p v-else class="controls__message">{{ t('sky.controls.calibrated') }}</p>
 
     <div class="controls__row">
       <button
@@ -59,7 +66,7 @@ const offsetText = computed(() => {
     <p v-if="calibrateNote" :id="noteId" class="controls__note">
       {{ calibrateNote }}
     </p>
-    <p class="controls__note">
+    <p class="controls__note" aria-live="polite">
       {{ t('sky.controls.offset', { degrees: offsetText }) }}
     </p>
 

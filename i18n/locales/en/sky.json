@@ -14,9 +14,10 @@
       "requesting": "Waiting for permission for the camera and compass…",
       "ready": "Camera and compass are on. The lines follow where you point your phone.",
       "denied": "Zonkant has no access to the camera or compass. Allow access in your browser settings, then try again.",
+      "busy": "Another app is using the camera. Close it and try again.",
       "unsupported": "This device or browser cannot open a camera or compass. The table below has the sun's direction and height.",
       "insecure": "The camera only works on a secure (https) page.",
-      "noSensor": "No compass found. The camera is on, but the lines cannot be placed. Try a phone or tablet."
+      "noSensor": "No compass found, so the lines cannot be placed. Try a phone or tablet."
     },
     "controls": {
       "label": "Calibration and view",

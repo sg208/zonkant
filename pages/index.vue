@@ -29,10 +29,15 @@ const startNote = ref('');
 
 // WHY: only after mount; at setup the prerendered Amsterdam default must hydrate unchanged
 onMounted(async () => {
-  const place = await zonePlace(timeZone);
-  if (place && adoptStart(place)) {
-    const city = (timeZone.split('/').pop() ?? timeZone).replaceAll('_', ' ');
-    startNote.value = t('home.startNote', { city });
+  try {
+    const place = await zonePlace(timeZone);
+    if (place && adoptStart(place)) {
+      const city = (timeZone.split('/').pop() ?? timeZone).replaceAll('_', ' ');
+      startNote.value = t('home.startNote', { city });
+    }
+  } catch {
+    // A failed chunk load (offline, stale hash after a deploy) is only the
+    // start-place guess: leave the Amsterdam default instead of erroring
   }
 });
 

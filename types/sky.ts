@@ -52,6 +52,7 @@ export type SkyAccessStatus =
   | 'requesting'
   | 'granted'
   | 'denied'
+  | 'busy'
   | 'unsupported'
   | 'insecure'
   | 'no-sensor';
