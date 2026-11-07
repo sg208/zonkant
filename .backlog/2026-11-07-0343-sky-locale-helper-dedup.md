@@ -3,7 +3,7 @@
 - **Date**: 2026-11-07 03:43
 - **Type**: chore
 - **Effort**: medium
-- **Status**: ready
+- **Status**: done
 - **Source**: review finding (v0.1.4 deferred low: "SkyCanvas/SkyControls/INTL_TAGS duplication", `.enggflo/brain.md:37`)
 
 ## Goal
@@ -24,17 +24,22 @@
 1. Export `INTL_TAGS` and add `toAppLocale(locale: string): AppLocale` in `utils/format.ts` (or `utils/locale.ts` if `format.ts` grows past ~150 lines) · files: `utils/format.ts` · satisfies: D-1, D-2
 2. Replace the three local `INTL_TAGS` and four ternaries with the helper · files: `components/SkyControls.vue`, `components/SkyTimesTable.vue`, `components/SunPanel.vue`, `components/SunSheet.vue` · satisfies: D-1, D-2
 3. Add a unit test that `toAppLocale('nl-NL')` / `'en-GB'` / unknown map to `nl` / `en` · files: `tests/unit/format.spec.ts` · satisfies: D-3
+
 - Cheaper option: only remove the local `INTL_TAGS` copies in the two Sky components and import the exported constant; leave the ternaries. | none
 
 ## Done when
 
-| id  | check                                                                                   | expect                             |
-| --- | --------------------------------------------------------------------------------------- | ---------------------------------- |
-| D-1 | `grep -rln "INTL_TAGS" components \| wc -l`                                              | `0`                                |
-| D-2 | `grep -rn "=== 'nl' ? 'nl' : 'en'" components utils \| wc -l`                           | `0`                                |
-| D-3 | `pnpm vitest run tests/unit/format.spec.ts`                                             | exit 0 · new helper test passes    |
-| D-4 | `pnpm test && pnpm type-check && pnpm lint`                                             | exit 0                             |
-| D-5 | `pnpm test:e2e -- sky`                                                                  | exit 0 · Sky view behaviour unchanged |
+| id  | check                                                         | expect                                |
+| --- | ------------------------------------------------------------- | ------------------------------------- |
+| D-1 | `grep -rln "INTL_TAGS" components \| wc -l`                   | `0`                                   |
+| D-2 | `grep -rn "=== 'nl' ? 'nl' : 'en'" components utils \| wc -l` | `0`                                   |
+| D-3 | `pnpm vitest run tests/unit/format.spec.ts`                   | exit 0 · new helper test passes       |
+| D-4 | `pnpm test && pnpm type-check && pnpm lint`                   | exit 0                                |
+| D-5 | `pnpm test:e2e -- sky`                                        | exit 0 · Sky view behaviour unchanged |
+
+## Shipped
+
+- `toAppLocale` and `intlTagFor` in `utils/format.ts`; `composables/useAppLocale.ts` returns `{ appLocale, intlTag }`. SunPanel, SunSheet, SkyControls and SkyTimesTable use it. Date-text parsing (`utils/dateText.ts`) and angle wrap (`utils/angles.ts`) were deduplicated in the same refactor.
 
 ## Open questions
 

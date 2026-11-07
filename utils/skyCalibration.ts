@@ -1,3 +1,4 @@
+import { wrapDegrees } from '~/utils/angles';
 import { readSun } from '~/utils/sun';
 import type {
   CalibrationOffsets,
@@ -7,8 +8,6 @@ import type {
 } from '~/types/sky';
 
 // Offsets live in memory only; the caller owns the state and drops it to reset.
-const wrapDegrees = (degrees: number): number => ((degrees % 360) + 360) % 360;
-
 // Shortest signed turn, -180 < result <= 180
 const shortestTurnDeg = (degrees: number): number => {
   const wrapped = wrapDegrees(degrees);

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { DayTimes, LatLon, SunReading } from '~/types/sun';
-import type { AppLocale } from '~/types/locale';
 import { formatAltitude, formatCompass, formatShadow } from '~/utils/format';
 import { toQuery } from '~/utils/urlState';
 
@@ -27,11 +26,9 @@ const DESKTOP_QUERY = '(min-width: 768px)';
 const sheet = ref<HTMLElement | null>(null);
 const isExpanded = ref(false);
 const moreId = `${useId()}-more`;
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const localePath = useLocalePath();
-const appLocale = computed<AppLocale>(() =>
-  locale.value === 'nl' ? 'nl' : 'en'
-);
+const { appLocale } = useAppLocale();
 const legalLinks = [
   { to: '/accessibility', labelKey: 'sheet.links.accessibility' },
   { to: '/privacy', labelKey: 'sheet.links.privacy' },
@@ -133,7 +130,9 @@ onBeforeUnmount(() => {
           <li>
             <a :href="repoUrl" target="_blank" rel="noopener noreferrer">
               {{ t('links.source') }}
-              <span class="sheet__sr">{{ t('common.opensInNewTab') }}</span>
+              <span class="visually-hidden">{{
+                t('common.opensInNewTab')
+              }}</span>
             </a>
           </li>
         </ul>
@@ -201,15 +200,6 @@ onBeforeUnmount(() => {
   align-items: center;
   min-height: var(--target);
   text-decoration-thickness: 2px;
-}
-.sheet__sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
 }
 
 @media (min-width: 768px) {

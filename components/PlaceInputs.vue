@@ -18,13 +18,23 @@ const GEO_MESSAGE_KEYS: Record<GeolocationState, string> = {
   error: 'place.geo.error',
 };
 
-const show = (value: number): string => String(Number(value.toFixed(5)));
-const draftLat = ref(show(props.lat));
-const draftLon = ref(show(props.lon));
+const formatCoordinate = (value: number): string =>
+  String(Number(value.toFixed(5)));
+const draftLat = ref(formatCoordinate(props.lat));
+const draftLon = ref(formatCoordinate(props.lon));
 const latError = ref('');
 const lonError = ref('');
 
-const check = (draft: string, limit: number, label: string): string => {
+const clearErrors = (): void => {
+  latError.value = '';
+  lonError.value = '';
+};
+
+const validateCoordinate = (
+  draft: string,
+  limit: number,
+  label: string
+): string => {
   if (draft.trim() === '' || Number.isNaN(Number(draft)))
     return t('place.enterNumber');
   return Math.abs(Number(draft)) <= limit
@@ -36,8 +46,12 @@ const handleInput = (event: Event): void => {
   const input = event.target as HTMLInputElement;
   if (input.name === 'lat') draftLat.value = input.value;
   else draftLon.value = input.value;
-  latError.value = check(draftLat.value, 90, t('place.latitude'));
-  lonError.value = check(draftLon.value, 180, t('place.longitude'));
+  latError.value = validateCoordinate(draftLat.value, 90, t('place.latitude'));
+  lonError.value = validateCoordinate(
+    draftLon.value,
+    180,
+    t('place.longitude')
+  );
   if (!latError.value && !lonError.value) {
     emit('update', {
       lat: Number(draftLat.value),
@@ -50,19 +64,19 @@ const handleInput = (event: Event): void => {
 watch(
   () => [props.lat, props.lon],
   () => {
-    if (Number(draftLat.value) !== props.lat) draftLat.value = show(props.lat);
-    if (Number(draftLon.value) !== props.lon) draftLon.value = show(props.lon);
-    latError.value = '';
-    lonError.value = '';
+    if (Number(draftLat.value) !== props.lat)
+      draftLat.value = formatCoordinate(props.lat);
+    if (Number(draftLon.value) !== props.lon)
+      draftLon.value = formatCoordinate(props.lon);
+    clearErrors();
   }
 );
 
 watch(coords, (place) => {
   if (!place) return;
-  draftLat.value = show(place.lat);
-  draftLon.value = show(place.lon);
-  latError.value = '';
-  lonError.value = '';
+  draftLat.value = formatCoordinate(place.lat);
+  draftLon.value = formatCoordinate(place.lon);
+  clearErrors();
   emit('update', place);
 });
 

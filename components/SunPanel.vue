@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { AppLocale } from '~/types/locale';
 import type { DayTimes, SunReading, TimeRange } from '~/types/sun';
 import {
   formatAltitude,
@@ -17,10 +16,8 @@ const props = defineProps<{
   timeZone: string;
 }>();
 
-const { t, locale } = useI18n();
-const appLocale = computed<AppLocale>(() =>
-  locale.value === 'nl' ? 'nl' : 'en'
-);
+const { t } = useI18n();
+const { appLocale } = useAppLocale();
 
 const isBelowHorizon = computed(() => props.reading.altitudeDeg <= 0);
 

@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import {
+  padTwoDigits,
+  parseClockText,
+  toClockText,
+  toDateText,
+} from '~/utils/dateText';
+
 const MINUTES_PER_DAY = 1440;
 const STEP_MIN = 5;
 
@@ -10,16 +17,14 @@ const id = useId();
 const sliderId = `${id}-time`;
 const dateId = `${id}-date`;
 
-const pad = (value: number): string => String(value).padStart(2, '0');
-
 const minutes = computed(() => {
-  const [hours = 0, mins = 0] = time.value.split(':').map(Number);
-  return hours * 60 + mins;
+  const { hours, minutes: minuteOfHour } = parseClockText(time.value);
+  return hours * 60 + minuteOfHour;
 });
 
 const handleSlide = (event: Event): void => {
   const value = Number((event.target as HTMLInputElement).value);
-  time.value = `${pad(Math.floor(value / 60))}:${pad(value % 60)}`;
+  time.value = `${padTwoDigits(Math.floor(value / 60))}:${padTwoDigits(value % 60)}`;
 };
 
 const handleDate = (event: Event): void => {
@@ -27,11 +32,10 @@ const handleDate = (event: Event): void => {
   if (value) date.value = value;
 };
 
-// Local Date fields, so the stored strings follow the device clock across DST
 const handleNow = (): void => {
   const now = new Date();
-  date.value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-  time.value = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  date.value = toDateText(now);
+  time.value = toClockText(now);
 };
 </script>
 

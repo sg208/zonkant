@@ -6,6 +6,8 @@ import {
   formatDuration,
   formatShadow,
   formatTime,
+  intlTagFor,
+  toAppLocale,
 } from '~/utils/format';
 
 describe('formatCompass', () => {
@@ -126,5 +128,23 @@ describe('formatAltitude', () => {
 describe('deviceTimeZone', () => {
   it('returns the IANA zone the tests run in', () => {
     expect(deviceTimeZone()).toBe('Europe/Amsterdam');
+  });
+});
+
+describe('toAppLocale', () => {
+  it.each([
+    ['nl', 'nl'],
+    ['en', 'en'],
+    ['nl-NL', 'en'],
+    ['de', 'en'],
+  ])('maps %s to %s', (input, expected) => {
+    expect(toAppLocale(input)).toBe(expected);
+  });
+});
+
+describe('intlTagFor', () => {
+  it('returns the Intl tag per app locale', () => {
+    expect(intlTagFor('nl')).toBe('nl-NL');
+    expect(intlTagFor('en')).toBe('en-GB');
   });
 });

@@ -4,11 +4,9 @@ const { repoUrl } = useAppConfig();
 const issuesUrl = `${repoUrl}/issues`;
 const locateLabel = computed(() => t('place.locate'));
 
-useHead({
-  title: computed(() => `${t('privacy.title')} - Zonkant`),
-  meta: [
-    { name: 'description', content: computed(() => t('privacy.description')) },
-  ],
+usePageHead({
+  titleKey: 'privacy.title',
+  descriptionKey: 'privacy.description',
 });
 </script>
 

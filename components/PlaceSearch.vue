@@ -49,7 +49,7 @@ const handleInput = (event: Event): void => {
   search(query.value);
 };
 
-const select = (place: GeocodePlace): void => {
+const handleSelect = (place: GeocodePlace): void => {
   clear();
   query.value = place.label;
   movedTo.value = place.label;
@@ -58,7 +58,7 @@ const select = (place: GeocodePlace): void => {
   emit('update', { lat: place.lat, lon: place.lon });
 };
 
-const move = async (step: 1 | -1): Promise<void> => {
+const moveActiveOption = async (step: 1 | -1): Promise<void> => {
   const count = results.value.length;
   if (count === 0) return;
   isOpen.value = true;
@@ -71,31 +71,36 @@ const move = async (step: 1 | -1): Promise<void> => {
     ?.scrollIntoView({ block: 'nearest' });
 };
 
+const handleEscape = (event: KeyboardEvent): void => {
+  if (isOpen.value) {
+    event.preventDefault();
+    isOpen.value = false;
+    activeIndex.value = -1;
+    return;
+  }
+  if (!query.value && results.value.length === 0) return;
+  event.preventDefault();
+  clear();
+  query.value = '';
+  movedTo.value = '';
+  activeIndex.value = -1;
+};
+
 const handleKeydown = (event: KeyboardEvent): void => {
   if (event.key === 'ArrowDown') {
     event.preventDefault();
-    move(1);
+    moveActiveOption(1);
   } else if (event.key === 'ArrowUp') {
     event.preventDefault();
-    move(-1);
+    moveActiveOption(-1);
   } else if (event.key === 'Enter') {
     event.preventDefault();
     const place = isExpanded.value
       ? results.value[Math.max(activeIndex.value, 0)]
       : null;
-    if (place) select(place);
+    if (place) handleSelect(place);
   } else if (event.key === 'Escape') {
-    if (isOpen.value) {
-      event.preventDefault();
-      isOpen.value = false;
-      activeIndex.value = -1;
-    } else if (query.value || results.value.length > 0) {
-      event.preventDefault();
-      clear();
-      query.value = '';
-      movedTo.value = '';
-      activeIndex.value = -1;
-    }
+    handleEscape(event);
   }
 };
 
@@ -139,7 +144,7 @@ const handleBlur = (): void => {
           :aria-selected="index === activeIndex"
           class="search__option"
           @mousedown="handleOptionMousedown"
-          @click="select(place)"
+          @click="handleSelect(place)"
         >
           {{ place.label }}
         </li>

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { AppLocale } from '~/types/locale';
-
 const props = defineProps<{
   isCalibrated: boolean;
   canCalibrate: boolean;
@@ -16,16 +14,16 @@ const emit = defineEmits<{
   reset: [];
 }>();
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
+const { intlTag } = useAppLocale();
 const noteId = `${useId()}-note`;
 const fovId = `${useId()}-fov`;
-const INTL_TAGS: Record<AppLocale, string> = { nl: 'nl-NL', en: 'en-GB' };
 
 const offsetText = computed(() => {
-  const formatter = new Intl.NumberFormat(
-    INTL_TAGS[locale.value === 'nl' ? 'nl' : 'en'],
-    { signDisplay: 'exceptZero', maximumFractionDigits: 1 }
-  );
+  const formatter = new Intl.NumberFormat(intlTag.value, {
+    signDisplay: 'exceptZero',
+    maximumFractionDigits: 1,
+  });
   return `${formatter.format(props.headingOffsetDeg)}°`;
 });
 </script>
