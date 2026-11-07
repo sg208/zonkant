@@ -96,3 +96,59 @@ describe('error page', () => {
     expect(wrapper.text()).toContain('500');
   });
 });
+
+// Dutch chrome. The test config makes en the default locale, so nl lives under /nl.
+describe('chrome in Dutch', () => {
+  const DUTCH = { route: '/nl' };
+
+  it('footer labels, links and licence line are Dutch', async () => {
+    const wrapper = await mountSuspended(AppFooter, DUTCH);
+    expect(wrapper.get('nav').attributes('aria-label')).toBe('Voettekst');
+    expect(wrapper.find('a[href="/nl/accessibility"]').text()).toBe(
+      'Toegankelijkheid'
+    );
+    expect(wrapper.find('a[href="/nl/terms"]').text()).toBe('Voorwaarden');
+    expect(wrapper.text()).toContain('Kaartgegevens van OpenStreetMap');
+    expect(wrapper.text()).toContain('(opent in een nieuw tabblad)');
+    const credit = wrapper
+      .findAll('p')
+      .find((node) => node.text().includes(`© ${year} Syailendra Ginting.`));
+    expect(credit?.text()).toBe(`© ${year} Syailendra Ginting. MIT-licentie.`);
+  });
+
+  it('layouts carry a Dutch skip link', async () => {
+    const wrapper = await mountSuspended(DefaultLayout, {
+      ...DUTCH,
+      slots: { default: '<p>Body</p>' },
+    });
+    expect(wrapper.get('a.skip-link').text()).toBe('Naar de inhoud');
+    const app = await mountSuspended(AppLayout, {
+      ...DUTCH,
+      slots: { default: '<p>Map</p>' },
+    });
+    expect(app.get('a.skip-link').text()).toBe('Naar de inhoud');
+  });
+
+  it('header offers the other language as a link in that language', async () => {
+    const wrapper = await mountSuspended(AppHeader, DUTCH);
+    const link = wrapper.get('nav a[hreflang="en"]');
+    expect(link.text()).toBe('English');
+    expect(link.attributes('lang')).toBe('en');
+    expect(wrapper.get('nav').attributes('aria-label')).toBe('Taal');
+  });
+
+  it('error page speaks Dutch and links home', async () => {
+    const notFound = await mountSuspended(ErrorPage, {
+      ...DUTCH,
+      props: { error: makeError(404) },
+    });
+    expect(notFound.get('h1').text()).toBe('Pagina niet gevonden');
+    expect(notFound.find('main a[href="/nl"]').text()).toContain('Terug');
+    const failed = await mountSuspended(ErrorPage, {
+      ...DUTCH,
+      props: { error: makeError(500) },
+    });
+    expect(failed.get('h1').text()).toBe('Er ging iets mis');
+    expect(failed.text()).toContain('fout 500');
+  });
+});

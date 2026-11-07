@@ -10,7 +10,8 @@ export default defineConfig({
   retries: 1,
   reporter: 'list',
   expect: { timeout: 15_000 },
-  use: { baseURL, timezoneId: 'Europe/Amsterdam' },
+  // en-US keeps the first-visit redirect to /en/ in play; Dutch tests set their own locale
+  use: { baseURL, timezoneId: 'Europe/Amsterdam', locale: 'en-US' },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile', use: { ...devices['Pixel 7'] } },

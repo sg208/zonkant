@@ -5,13 +5,15 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const { t } = useI18n();
 </script>
 
 <template>
   <div class="legal">
     <header>
       <h1 class="legal__title">{{ title }}</h1>
-      <p class="legal__updated">Updated 4 November 2026</p>
+      <p class="legal__updated">{{ t('updated') }}</p>
     </header>
     <div class="legal__body">
       <p class="legal__lead">{{ lead }}</p>

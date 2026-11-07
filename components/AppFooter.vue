@@ -1,40 +1,42 @@
 <script setup lang="ts">
+const { t } = useI18n();
+const localePath = useLocalePath();
 const { repoUrl } = useAppConfig();
 const currentYear = new Date().getFullYear();
 
 const siteLinks = [
-  { to: '/accessibility', label: 'Accessibility' },
-  { to: '/privacy', label: 'Privacy' },
-  { to: '/terms', label: 'Terms' },
-  { to: '/credits', label: 'Credits' },
+  { to: '/accessibility', labelKey: 'links.accessibility' },
+  { to: '/privacy', labelKey: 'links.privacy' },
+  { to: '/terms', labelKey: 'links.terms' },
+  { to: '/credits', labelKey: 'links.credits' },
 ] as const;
 </script>
 
 <template>
   <footer class="site-footer">
-    <h2 class="visually-hidden">About this site</h2>
+    <h2 class="visually-hidden">{{ t('footer.heading') }}</h2>
 
     <p class="site-footer__wordmark">Zonkant</p>
     <p class="site-footer__map">
-      Map data from OpenStreetMap contributors, tiles by OpenFreeMap.
+      {{ t('footer.map') }}
     </p>
 
-    <nav aria-label="Footer">
+    <nav :aria-label="t('footer.label')">
       <ul class="site-footer__links">
         <li v-for="link in siteLinks" :key="link.to">
-          <NuxtLink :to="link.to">{{ link.label }}</NuxtLink>
+          <NuxtLink :to="localePath(link.to)">{{ t(link.labelKey) }}</NuxtLink>
         </li>
         <li>
           <a :href="repoUrl" target="_blank" rel="noopener noreferrer">
-            Source on GitHub
-            <span class="visually-hidden">(opens in a new tab)</span>
+            {{ t('links.source') }}
+            <span class="visually-hidden">{{ t('common.opensInNewTab') }}</span>
           </a>
         </li>
       </ul>
     </nav>
 
     <p class="site-footer__legal">
-      © {{ currentYear }} Syailendra Ginting. MIT licence.
+      {{ t('footer.copyright', { year: currentYear }) }}
     </p>
   </footer>
 </template>

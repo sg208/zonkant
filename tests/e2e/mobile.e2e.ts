@@ -6,7 +6,7 @@ test.describe('mobile layout', () => {
   test('fits the viewport with 44 px targets and the point above the sheet', async ({
     page,
   }) => {
-    await page.goto('/?lat=52.3731&lon=4.8926&date=2026-06-21&time=12:00');
+    await page.goto('/en/?lat=52.3731&lon=4.8926&date=2026-06-21&time=12:00');
     await expect(page.locator('.ol-viewport canvas').first()).toBeAttached();
 
     const overflow = await page.evaluate(() => ({

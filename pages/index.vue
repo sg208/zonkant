@@ -7,6 +7,8 @@ import { zonePlace } from '~/utils/zoneStart';
 
 definePageMeta({ layout: 'app' });
 
+const { t } = useI18n();
+
 const { state, adoptStart } = useViewState();
 const bottomInset = ref(0);
 
@@ -27,10 +29,15 @@ const startNote = ref('');
 
 // WHY: only after mount; at setup the prerendered Amsterdam default must hydrate unchanged
 onMounted(async () => {
-  const place = await zonePlace(timeZone);
-  if (place && adoptStart(place)) {
-    const city = (timeZone.split('/').pop() ?? timeZone).replaceAll('_', ' ');
-    startNote.value = `Starting near ${city}, from your time zone`;
+  try {
+    const place = await zonePlace(timeZone);
+    if (place && adoptStart(place)) {
+      const city = (timeZone.split('/').pop() ?? timeZone).replaceAll('_', ' ');
+      startNote.value = t('home.startNote', { city });
+    }
+  } catch {
+    // A failed chunk load (offline, stale hash after a deploy) is only the
+    // start-place guess: leave the Amsterdam default instead of erroring
   }
 });
 
@@ -52,7 +59,12 @@ const handleSelect = (place: LatLon): void => {
   state.lon = place.lon;
 };
 
-useHead({ title: 'Zonkant - sun and shadow planner' });
+useHead({
+  title: computed(() => t('home.title')),
+  meta: [
+    { name: 'description', content: computed(() => t('home.description')) },
+  ],
+});
 </script>
 
 <template>

@@ -15,7 +15,7 @@ test.describe('geolocation', () => {
     });
 
     test('Locate me moves the place to Rotterdam', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('/en/');
       await openMore(page);
       await page.getByRole('button', { name: /locate me/i }).click();
       await expect(page.getByLabel('Latitude')).toHaveValue('51.9244');
@@ -27,7 +27,7 @@ test.describe('geolocation', () => {
     test.use({ permissions: [] });
 
     test('shows a message and the page stays usable', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('/en/');
       await openMore(page);
       await page.getByRole('button', { name: /locate me/i }).click();
       await expect(

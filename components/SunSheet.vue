@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { DayTimes, LatLon, SunReading } from '~/types/sun';
-import { formatCompass, formatShadow } from '~/utils/format';
+import type { AppLocale } from '~/types/locale';
+import { formatAltitude, formatCompass, formatShadow } from '~/utils/format';
+import { toQuery } from '~/utils/urlState';
 
 const props = defineProps<{
   reading: SunReading;
@@ -25,19 +27,44 @@ const DESKTOP_QUERY = '(min-width: 768px)';
 const sheet = ref<HTMLElement | null>(null);
 const isExpanded = ref(false);
 const moreId = `${useId()}-more`;
+const { t, locale } = useI18n();
+const localePath = useLocalePath();
+const appLocale = computed<AppLocale>(() =>
+  locale.value === 'nl' ? 'nl' : 'en'
+);
 const legalLinks = [
-  { to: '/accessibility', label: 'Accessibility' },
-  { to: '/privacy', label: 'Privacy' },
-  { to: '/terms', label: 'Terms' },
-  { to: '/credits', label: 'Credits' },
+  { to: '/accessibility', labelKey: 'sheet.links.accessibility' },
+  { to: '/privacy', labelKey: 'sheet.links.privacy' },
+  { to: '/terms', labelKey: 'sheet.links.terms' },
+  { to: '/credits', labelKey: 'sheet.links.credits' },
 ] as const;
 const { repoUrl } = useAppConfig();
+// Sky view opens on the same place and moment as the map
+const skyLink = computed(() =>
+  localePath({
+    path: '/sky',
+    query: toQuery({
+      lat: props.lat,
+      lon: props.lon,
+      date: date.value,
+      time: time.value,
+    }),
+  })
+);
+
+const altitudeText = computed(() =>
+  formatAltitude(props.reading.altitudeDeg, appLocale.value)
+);
 
 const summary = computed(() => {
-  const bearing = `${Math.round(props.reading.bearingDeg)}° ${formatCompass(props.reading.bearingDeg)}`;
+  const bearing = `${Math.round(props.reading.bearingDeg)}° ${formatCompass(props.reading.bearingDeg, appLocale.value)}`;
   if (props.reading.altitudeDeg <= 0)
-    return `Sun below the horizon · ${bearing}`;
-  return `${props.reading.altitudeDeg.toFixed(1)}° up · ${bearing} · shadow ${formatShadow(props.shadowM)}`;
+    return t('sheet.summaryDown', { bearing });
+  return t('sheet.summaryUp', {
+    altitude: altitudeText.value,
+    bearing,
+    shadow: formatShadow(props.shadowM, appLocale.value),
+  });
 });
 
 let observer: ResizeObserver | undefined;
@@ -68,7 +95,7 @@ onBeforeUnmount(() => {
   <div ref="sheet" class="sheet" :data-expanded="isExpanded">
     <div class="sheet__head">
       <p v-if="!isExpanded" class="sheet__summary">
-        <span class="sheet__big">{{ reading.altitudeDeg.toFixed(1) }}°</span>
+        <span class="sheet__big">{{ altitudeText }}</span>
         <span>{{ summary }}</span>
       </p>
       <TimeControls v-model:date="date" v-model:time="time" />
@@ -81,7 +108,7 @@ onBeforeUnmount(() => {
       :aria-controls="moreId"
       @click="isExpanded = !isExpanded"
     >
-      {{ isExpanded ? 'Less' : 'More' }}
+      {{ isExpanded ? t('sheet.less') : t('sheet.more') }}
     </button>
 
     <div :id="moreId" class="sheet__more">
@@ -93,15 +120,20 @@ onBeforeUnmount(() => {
       />
       <PlaceSearch @update="emit('place', $event)" />
       <PlaceInputs :lat="lat" :lon="lon" @update="emit('place', $event)" />
-      <nav aria-label="Legal">
+      <nav :aria-label="t('sheet.legalLabel')">
         <ul class="sheet__links">
+          <li>
+            <NuxtLink :to="skyLink">{{ t('sky.link') }}</NuxtLink>
+          </li>
           <li v-for="link in legalLinks" :key="link.to">
-            <NuxtLink :to="link.to">{{ link.label }}</NuxtLink>
+            <NuxtLink :to="localePath(link.to)">{{
+              t(link.labelKey)
+            }}</NuxtLink>
           </li>
           <li>
             <a :href="repoUrl" target="_blank" rel="noopener noreferrer">
-              Source on GitHub
-              <span class="sheet__sr">(opens in a new tab)</span>
+              {{ t('links.source') }}
+              <span class="sheet__sr">{{ t('common.opensInNewTab') }}</span>
             </a>
           </li>
         </ul>

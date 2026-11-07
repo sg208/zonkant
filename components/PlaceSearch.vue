@@ -4,6 +4,7 @@ import type { LatLon } from '~/types/sun';
 
 const emit = defineEmits<{ update: [place: LatLon] }>();
 
+const { t } = useI18n();
 const id = useId();
 const listId = `${id}-list`;
 const { results, status, search, clear } = usePlaceSearch();
@@ -22,15 +23,13 @@ const activeId = computed(() =>
 );
 
 const message = computed(() => {
-  if (movedTo.value) return `Moved to ${movedTo.value}`;
+  if (movedTo.value) return t('search.movedTo', { place: movedTo.value });
   if (!isOpen.value) return '';
-  const count = results.value.length;
-  if (status.value === 'loading') return 'Searching…';
+  if (status.value === 'loading') return t('search.searching');
   if (status.value === 'results')
-    return `${count} ${count === 1 ? 'place' : 'places'} found`;
-  if (status.value === 'empty') return 'No places found';
-  if (status.value === 'error')
-    return 'Search is unavailable. Check your connection or type coordinates.';
+    return t('search.found', results.value.length);
+  if (status.value === 'empty') return t('search.empty');
+  if (status.value === 'error') return t('search.error');
   return '';
 });
 
@@ -113,7 +112,7 @@ const handleBlur = (): void => {
 
 <template>
   <div class="search">
-    <label :for="`${id}-input`">Search a place</label>
+    <label :for="`${id}-input`">{{ t('search.label') }}</label>
     <div class="search__field">
       <input
         :id="`${id}-input`"
@@ -161,7 +160,7 @@ const handleBlur = (): void => {
       </p>
     </div>
     <p class="search__hint">
-      Search text is sent to Photon (komoot) to find places.
+      {{ t('search.hint') }}
     </p>
   </div>
 </template>

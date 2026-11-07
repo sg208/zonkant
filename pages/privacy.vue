@@ -1,82 +1,53 @@
 <script setup lang="ts">
+const { t } = useI18n();
 const { repoUrl } = useAppConfig();
 const issuesUrl = `${repoUrl}/issues`;
+const locateLabel = computed(() => t('place.locate'));
 
 useHead({
-  title: 'Privacy - Zonkant',
+  title: computed(() => `${t('privacy.title')} - Zonkant`),
   meta: [
-    {
-      name: 'description',
-      content:
-        'Zonkant sets no cookies, has no tracking and stores nothing in your browser. Your location stays on your device.',
-    },
+    { name: 'description', content: computed(() => t('privacy.description')) },
   ],
 });
 </script>
 
 <template>
-  <LegalPage
-    title="Privacy"
-    lead="Zonkant does not collect anything about you. It has no accounts, no cookies and no tracking."
-  >
-    <h2>What stays on your device</h2>
-    <p>
-      No cookies. There is no storage either: nothing is saved in your browser's
-      local or session storage, and nothing is remembered when you close the
-      page.
-    </p>
+  <LegalPage :title="t('privacy.title')" :lead="t('privacy.lead')">
+    <h2>{{ t('privacy.device.heading') }}</h2>
+    <p>{{ t('privacy.device.body') }}</p>
+    <p>{{ t('privacy.device.language') }}</p>
 
-    <h2>Your location</h2>
-    <p>
-      Your position is read only when you press "Locate me", and only once. It
-      stays on your device: it is never sent to this site or to anyone else. You
-      can also type coordinates or tap the map instead.
-    </p>
-    <p>
-      When the address has no place in it, the map starts at the location of
-      your device's time zone. The time zone is read on your device and is never
-      sent anywhere.
-    </p>
-    <p>
-      The place and time you pick are written into the address of the page (for
-      example <code>?lat=52.37&amp;lon=4.89</code>) so you can bookmark or share
-      the view. Whoever you give that address to can see those coordinates.
-    </p>
+    <h2>{{ t('privacy.location.heading') }}</h2>
+    <p>{{ t('privacy.location.press', { locate: locateLabel }) }}</p>
+    <p>{{ t('privacy.location.zone') }}</p>
+    <i18n-t keypath="privacy.location.shared" tag="p">
+      <template #example>
+        <code>?lat=52.37&amp;lon=4.89</code>
+      </template>
+    </i18n-t>
 
-    <h2>Who your browser talks to</h2>
-    <p>
-      The map loads straight from OpenFreeMap, so it can see your IP address, as
-      with any website:
-    </p>
+    <h2>{{ t('privacy.sky.heading') }}</h2>
+    <p>{{ t('privacy.sky.camera', { start: t('sky.start') }) }}</p>
+    <p>{{ t('privacy.sky.sensors') }}</p>
+
+    <h2>{{ t('privacy.who.heading') }}</h2>
+    <p>{{ t('privacy.who.intro') }}</p>
     <ul>
-      <li>
-        tiles.openfreemap.org supplies the map style, tiles, sprites and glyphs.
-        It receives the area of the map you look at.
-      </li>
-      <li>
-        photon.komoot.io finds places when you use the search field. The search
-        text you type is sent to it, together with your IP address, but only
-        after 3 characters and a short pause. Photon is run by komoot and uses
-        OpenStreetMap data. Coordinates and your "Locate me" position are never
-        sent to it.
-      </li>
-      <li>Cloudflare hosts this site and delivers its files.</li>
+      <li>{{ t('privacy.who.tiles') }}</li>
+      <li>{{ t('privacy.who.photon', { locate: locateLabel }) }}</li>
+      <li>{{ t('privacy.who.cloudflare') }}</li>
     </ul>
-    <p>
-      Sun positions are calculated in your browser. Fonts and icons are served
-      from this site, not from a third party.
-    </p>
+    <p>{{ t('privacy.who.local') }}</p>
 
-    <h2>Tracking</h2>
-    <p>
-      There is no tracking: no visitor counting, no advertising and no
-      fingerprinting.
-    </p>
+    <h2>{{ t('privacy.tracking.heading') }}</h2>
+    <p>{{ t('privacy.tracking.body') }}</p>
 
-    <h2>Questions</h2>
-    <p>
-      Open an issue on <a :href="issuesUrl">GitHub</a> and the author will reply
-      there.
-    </p>
+    <h2>{{ t('privacy.questions.heading') }}</h2>
+    <i18n-t keypath="privacy.questions.body" tag="p">
+      <template #github>
+        <a :href="issuesUrl">GitHub</a>
+      </template>
+    </i18n-t>
   </LegalPage>
 </template>

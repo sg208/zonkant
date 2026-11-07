@@ -1,0 +1,107 @@
+{
+  "language": {
+    "label": "Language"
+  },
+  "common": {
+    "opensInNewTab": "(opens in a new tab)"
+  },
+  "home": {
+    "title": "Zonkant - sun and shadow planner",
+    "description": "See where the sun is and where its shadow falls, for any place and time.",
+    "startNote": "Starting near {city}, from your time zone"
+  },
+  "map": {
+    "label": "Map",
+    "selectedPoint": "Selected point",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "tilesError": "Map tiles could not load",
+    "linesLabel": "Map lines",
+    "lines": {
+      "sunrise": "Sunrise",
+      "sunset": "Sunset",
+      "sun": "Sun now",
+      "shadow": "Shadow"
+    },
+    "osm": "Data from OpenStreetMap"
+  },
+  "sheet": {
+    "more": "More",
+    "less": "Less",
+    "summaryUp": "{altitude} up · {bearing} · shadow {shadow}",
+    "summaryDown": "Sun below the horizon · {bearing}",
+    "legalLabel": "Legal"
+  },
+  "panel": {
+    "title": "Sun right now",
+    "altitude": "Altitude",
+    "bearing": "Bearing",
+    "shadow": "Shadow of 1 m",
+    "today": "Today",
+    "sunrise": "Sunrise",
+    "sunset": "Sunset",
+    "goldenHour": "Golden hour",
+    "blueHour": "Blue hour",
+    "dayLength": "Day length",
+    "polarDay": "Polar day: the sun does not set today.",
+    "polarNight": "Polar night: the sun does not rise today.",
+    "belowHorizon": "The sun is below the horizon at this time.",
+    "staysUp": "Sun stays up",
+    "staysDown": "Sun stays down",
+    "none": "None today",
+    "bothRanges": "{morning} and {evening}",
+    "fine": "Times in {timeZone} (this device's time zone). Shadows assume flat ground, no buildings."
+  },
+  "time": {
+    "time": "Time",
+    "date": "Date",
+    "now": "Now"
+  },
+  "search": {
+    "label": "Search a place",
+    "movedTo": "Moved to {place}",
+    "searching": "Searching…",
+    "found": "{count} place found | {count} places found",
+    "empty": "No places found",
+    "error": "Search is unavailable. Check your connection or type coordinates.",
+    "hint": "Search text is sent to Photon (komoot) to find places."
+  },
+  "place": {
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "locate": "Locate me",
+    "enterNumber": "Enter a number",
+    "outOfRange": "{label} must be between -{limit} and {limit}",
+    "hint": "Your location stays on this device and is never sent anywhere.",
+    "geo": {
+      "pending": "Finding your location...",
+      "granted": "Location found. It stays on this device.",
+      "denied": "Location permission was denied. You can still type coordinates or tap the map.",
+      "unsupported": "This browser cannot share its location. Type coordinates or tap the map.",
+      "error": "Could not get your location. Try again, type coordinates or tap the map."
+    }
+  },
+  "links": {
+    "accessibility": "Accessibility",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "credits": "Credits",
+    "source": "Source on GitHub"
+  },
+  "shell": {
+    "skip": "Skip to content"
+  },
+  "footer": {
+    "heading": "About this site",
+    "label": "Footer",
+    "map": "Map data from OpenStreetMap contributors, tiles by OpenFreeMap.",
+    "copyright": "© {year} Syailendra Ginting. MIT licence."
+  },
+  "error": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "There is no page at this address. It may have moved, or the name may be wrong.",
+    "failedTitle": "Page error",
+    "failedBody": "The page could not load (error {code}). Try again in a moment.",
+    "home": "Back to the sun planner"
+  }
+}

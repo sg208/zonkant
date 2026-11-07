@@ -16,7 +16,9 @@ const openMore = async (
 
 test.describe('url state', () => {
   test('a shared URL reproduces the altitude', async ({ page }) => {
-    await page.goto('/?lat=52.3731&lon=4.8926&date=2026-06-21&time=13:37');
+    await page.goto('/en/?lat=52.3731&lon=4.8926&date=2026-06-21&time=13:37');
+    // WHY: the prerendered readout shows build time; wait until the app has hydrated (map built)
+    await expect(page.locator('.ol-viewport')).toBeAttached();
     await openMore(page);
     // 90 - 52.37 + 23.44 = 61.07 at solar noon, 13:37 CEST is about 8 min past it
     expect(await readAltitude(page)).toBeGreaterThan(59);
@@ -24,7 +26,7 @@ test.describe('url state', () => {
   });
 
   test('invalid params fall back without an error page', async ({ page }) => {
-    await page.goto('/?lat=999&lon=abc&date=2026-02-30&time=25:00');
+    await page.goto('/en/?lat=999&lon=abc&date=2026-02-30&time=25:00');
     await expect(
       page.getByRole('heading', { level: 1, name: 'Zonkant' })
     ).toHaveCount(1);
@@ -36,7 +38,9 @@ test.describe('url state', () => {
   test('keyboard on the slider changes the time and the URL', async ({
     page,
   }) => {
-    await page.goto('/?lat=52.3731&lon=4.8926&date=2026-06-21&time=12:00');
+    await page.goto('/en/?lat=52.3731&lon=4.8926&date=2026-06-21&time=12:00');
+    // WHY: a key press before hydration is lost to the prerendered input
+    await expect(page.locator('.ol-viewport')).toBeAttached();
     const slider = page.getByRole('slider');
     await slider.focus();
     await page.keyboard.press('ArrowRight');

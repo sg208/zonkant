@@ -47,7 +47,10 @@ const mockPhoton = async (
 };
 
 const openSearch = async (page: Page): Promise<void> => {
-  await page.goto('/?lat=52.3731&lon=4.8926&date=2026-06-21&time=12:00');
+  await page.goto('/en/?lat=52.3731&lon=4.8926&date=2026-06-21&time=12:00');
+  // The client-only map mounts after hydration; typing earlier lands in the
+  // prerendered input before Vue's handlers attach and is lost
+  await expect(page.locator('.ol-viewport')).toBeAttached();
   const toggle = page.getByRole('button', { name: 'More' });
   if (await toggle.isVisible()) await toggle.click();
   await expect(

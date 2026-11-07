@@ -5,7 +5,6 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { lang: 'en' },
       // viewport-fit=cover lets the sheet pad itself with safe-area insets
       meta: [
         {
@@ -16,7 +15,33 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@nuxt/eslint'],
+  modules: ['@nuxt/eslint', '@nuxtjs/i18n'],
+
+  // Dutch at /, English under /en. No cookie and no stored locale: the only
+  // detection is the inline script in utils/langRedirect.ts
+  i18n: {
+    baseUrl: 'https://zonkant.engg.app',
+    defaultLocale: 'nl',
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: false,
+    // WHY: embed the page's messages in the HTML so hydration does not wait on a
+    // messages.json request; keep all keys (map and error strings render client-side only)
+    experimental: { preload: true, stripMessagesPayload: false },
+    locales: [
+      {
+        code: 'nl',
+        language: 'nl-NL',
+        name: 'Nederlands',
+        file: 'nl.ts',
+      },
+      {
+        code: 'en',
+        language: 'en-GB',
+        name: 'English',
+        file: 'en.ts',
+      },
+    ],
+  },
 
   // Self-hosted variable font; no remote font provider
   css: ['@fontsource-variable/tiktok-sans/wdth.css', '~/assets/css/main.css'],
@@ -46,7 +71,20 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: false,
-      routes: ['/', '/privacy', '/terms', '/accessibility', '/credits'],
+      routes: [
+        '/',
+        '/privacy',
+        '/terms',
+        '/accessibility',
+        '/credits',
+        '/sky',
+        '/en',
+        '/en/privacy',
+        '/en/terms',
+        '/en/accessibility',
+        '/en/credits',
+        '/en/sky',
+      ],
     },
   },
 });

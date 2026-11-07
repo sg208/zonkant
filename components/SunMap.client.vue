@@ -33,11 +33,11 @@ const COORDINATE_EPSILON = 1e-9;
 
 type LineKind = keyof MapBearings;
 
-const LINES: { kind: LineKind; label: string; dash: number[] }[] = [
-  { kind: 'sunrise', label: 'Sunrise', dash: [10, 6] },
-  { kind: 'sunset', label: 'Sunset', dash: [2, 6] },
-  { kind: 'sun', label: 'Sun now', dash: [] },
-  { kind: 'shadow', label: 'Shadow', dash: [14, 4, 2, 4] },
+const LINES: { kind: LineKind; dash: number[] }[] = [
+  { kind: 'sunrise', dash: [10, 6] },
+  { kind: 'sunset', dash: [2, 6] },
+  { kind: 'sun', dash: [] },
+  { kind: 'shadow', dash: [14, 4, 2, 4] },
 ];
 const COLOR: Record<LineKind, string> = {
   sunrise: PALETTE['line-sunrise'],
@@ -46,6 +46,7 @@ const COLOR: Record<LineKind, string> = {
   shadow: PALETTE['line-shadow'],
 };
 
+const { t } = useI18n();
 const mapElement = ref<HTMLElement | null>(null);
 const markerElement = ref<HTMLElement | null>(null);
 const hasTileError = ref(false);
@@ -193,8 +194,10 @@ onMounted(async () => {
     rotate: false,
     zoomOptions: {
       duration: zoomDuration,
-      zoomInLabel: buttonLabel('+', 'Zoom in'),
-      zoomOutLabel: buttonLabel('\u2212', 'Zoom out'),
+      zoomInLabel: buttonLabel('+', t('map.zoomIn')),
+      zoomInTipLabel: t('map.zoomIn'),
+      zoomOutLabel: buttonLabel('\u2212', t('map.zoomOut')),
+      zoomOutTipLabel: t('map.zoomOut'),
     },
   });
   map = new Map({
@@ -267,7 +270,7 @@ onBeforeUnmount(() => {
       ref="mapElement"
       class="sun-map__canvas"
       role="region"
-      aria-label="Map"
+      :aria-label="t('map.label')"
       tabindex="0"
     ></div>
     <div class="sun-map__marker-host">
@@ -275,14 +278,14 @@ onBeforeUnmount(() => {
         ref="markerElement"
         class="sun-map__marker"
         role="img"
-        aria-label="Selected point"
+        :aria-label="t('map.selectedPoint')"
       ></div>
     </div>
     <p class="sun-map__status" role="status">
-      {{ hasTileError ? 'Map tiles could not load' : '' }}
+      {{ hasTileError ? t('map.tilesError') : '' }}
     </p>
     <div class="sun-map__info">
-      <ul class="sun-map__legend" aria-label="Map lines">
+      <ul class="sun-map__legend" :aria-label="t('map.linesLabel')">
         <li v-for="line in visibleLines" :key="line.kind">
           <svg width="32" height="8" aria-hidden="true" focusable="false">
             <line
@@ -295,7 +298,7 @@ onBeforeUnmount(() => {
               :stroke-dasharray="line.dash.join(' ') || undefined"
             />
           </svg>
-          {{ line.label }}
+          {{ t(`map.lines.${line.kind}`) }}
         </li>
       </ul>
       <p class="sun-map__attribution">
@@ -304,7 +307,7 @@ onBeforeUnmount(() => {
           target="_blank"
           rel="noopener noreferrer"
           >OpenFreeMap<span class="sun-map__note">
-            (opens in a new tab)</span
+            {{ t('common.opensInNewTab') }}</span
           ></a
         >
         <a
@@ -312,15 +315,16 @@ onBeforeUnmount(() => {
           target="_blank"
           rel="noopener noreferrer"
           >© OpenMapTiles<span class="sun-map__note">
-            (opens in a new tab)</span
+            {{ t('common.opensInNewTab') }}</span
           ></a
         >
         <a
           href="https://www.openstreetmap.org/copyright"
           target="_blank"
           rel="noopener noreferrer"
-          >Data from OpenStreetMap<span class="sun-map__note">
-            (opens in a new tab)</span
+          >{{ t('map.osm')
+          }}<span class="sun-map__note">
+            {{ t('common.opensInNewTab') }}</span
           ></a
         >
       </p>

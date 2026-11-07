@@ -1,0 +1,107 @@
+{
+  "language": {
+    "label": "Taal"
+  },
+  "common": {
+    "opensInNewTab": "(opent in een nieuw tabblad)"
+  },
+  "home": {
+    "title": "Zonkant - zon- en schaduwplanner",
+    "description": "Zie waar de zon staat en waar de schaduw valt, op elke plek en elk moment.",
+    "startNote": "We beginnen bij {city}, op basis van je tijdzone"
+  },
+  "map": {
+    "label": "Kaart",
+    "selectedPoint": "Gekozen punt",
+    "zoomIn": "Inzoomen",
+    "zoomOut": "Uitzoomen",
+    "tilesError": "De kaart kon niet worden geladen",
+    "linesLabel": "Lijnen op de kaart",
+    "lines": {
+      "sunrise": "Zonsopkomst",
+      "sunset": "Zonsondergang",
+      "sun": "Zon nu",
+      "shadow": "Schaduw"
+    },
+    "osm": "Gegevens van OpenStreetMap"
+  },
+  "sheet": {
+    "more": "Meer",
+    "less": "Minder",
+    "summaryUp": "{altitude} boven de horizon · {bearing} · schaduw {shadow}",
+    "summaryDown": "Zon onder de horizon · {bearing}",
+    "legalLabel": "Juridisch"
+  },
+  "panel": {
+    "title": "De zon op dit moment",
+    "altitude": "Hoogte",
+    "bearing": "Richting",
+    "shadow": "Schaduw van 1 m",
+    "today": "Vandaag",
+    "sunrise": "Zonsopkomst",
+    "sunset": "Zonsondergang",
+    "goldenHour": "Gouden uur",
+    "blueHour": "Blauwe uur",
+    "dayLength": "Daglengte",
+    "polarDay": "Middernachtzon: de zon gaat vandaag niet onder.",
+    "polarNight": "Poolnacht: de zon komt vandaag niet op.",
+    "belowHorizon": "De zon staat op dit moment onder de horizon.",
+    "staysUp": "Zon blijft boven",
+    "staysDown": "Zon blijft onder",
+    "none": "Vandaag niet",
+    "bothRanges": "{morning} en {evening}",
+    "fine": "Tijden in {timeZone} (de tijdzone van dit apparaat). Bij schaduw gaan we uit van vlak terrein zonder gebouwen."
+  },
+  "time": {
+    "time": "Tijd",
+    "date": "Datum",
+    "now": "Nu"
+  },
+  "search": {
+    "label": "Zoek een plaats",
+    "movedTo": "Verplaatst naar {place}",
+    "searching": "Zoeken…",
+    "found": "{count} resultaat | {count} resultaten",
+    "empty": "Geen plaatsen gevonden",
+    "error": "Zoeken is nu niet beschikbaar. Controleer je verbinding of vul coördinaten in.",
+    "hint": "Wat je typt wordt naar Photon (komoot) gestuurd om plaatsen te vinden."
+  },
+  "place": {
+    "latitude": "Breedtegraad",
+    "longitude": "Lengtegraad",
+    "locate": "Mijn locatie",
+    "enterNumber": "Vul een getal in",
+    "outOfRange": "{label} moet tussen -{limit} en {limit} liggen",
+    "hint": "Je locatie blijft op dit apparaat en wordt nergens naartoe gestuurd.",
+    "geo": {
+      "pending": "Je locatie wordt gezocht...",
+      "granted": "Locatie gevonden. Die blijft op dit apparaat.",
+      "denied": "Toegang tot je locatie is geweigerd. Je kunt nog steeds coördinaten invullen of op de kaart tikken.",
+      "unsupported": "Deze browser kan je locatie niet delen. Vul coördinaten in of tik op de kaart.",
+      "error": "Je locatie kon niet worden opgehaald. Probeer het opnieuw, vul coördinaten in of tik op de kaart."
+    }
+  },
+  "links": {
+    "accessibility": "Toegankelijkheid",
+    "privacy": "Privacy",
+    "terms": "Voorwaarden",
+    "credits": "Bronnen",
+    "source": "Broncode op GitHub"
+  },
+  "shell": {
+    "skip": "Naar de inhoud"
+  },
+  "footer": {
+    "heading": "Over deze site",
+    "label": "Voettekst",
+    "map": "Kaartgegevens van OpenStreetMap-bijdragers, tegels van OpenFreeMap.",
+    "copyright": "© {year} Syailendra Ginting. MIT-licentie."
+  },
+  "error": {
+    "notFoundTitle": "Pagina niet gevonden",
+    "notFoundBody": "Op dit adres staat geen pagina. Misschien is de pagina verplaatst of klopt de naam niet.",
+    "failedTitle": "Er ging iets mis",
+    "failedBody": "De pagina kon niet worden geladen (fout {code}). Probeer het over een moment opnieuw.",
+    "home": "Terug naar de planner"
+  }
+}

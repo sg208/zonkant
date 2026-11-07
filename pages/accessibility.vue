@@ -1,61 +1,53 @@
 <script setup lang="ts">
+const { t } = useI18n();
 const { repoUrl } = useAppConfig();
 const issuesUrl = `${repoUrl}/issues`;
+const locateLabel = computed(() => t('place.locate'));
+const inPlaceKeys = [
+  'keyboard',
+  'skip',
+  'contrast',
+  'readout',
+  'motion',
+] as const;
 
 useHead({
-  title: 'Accessibility - Zonkant',
+  title: computed(() => `${t('accessibility.title')} - Zonkant`),
   meta: [
     {
       name: 'description',
-      content:
-        'Zonkant aims to meet WCAG 2.2 level AA and works with a keyboard.',
+      content: computed(() => t('accessibility.description')),
     },
   ],
 });
 </script>
 
 <template>
-  <LegalPage
-    title="Accessibility"
-    lead="Zonkant aims to meet WCAG 2.2 level AA. Everyone should be able to find the sunny side."
-  >
-    <h2>What is in place</h2>
+  <LegalPage :title="t('accessibility.title')" :lead="t('accessibility.lead')">
+    <h2>{{ t('accessibility.inPlace.heading') }}</h2>
     <ul>
-      <li>
-        You can pick a place without the map: type latitude and longitude, or
-        use "Locate me". The time is set with a date field and a slider that
-        works with the arrow keys.
-      </li>
-      <li>
-        Every control works with a keyboard, with a thick visible focus ring and
-        targets of at least 44 pixels.
-      </li>
-      <li>A skip link jumps past the header to the main content.</li>
-      <li>Text and sun lines have enough contrast against their background.</li>
-      <li>
-        The readout gives the sun's height, direction, key times and shadow
-        length as text, and says so when the sun is below the horizon.
-      </li>
-      <li>
-        Animation stops if your device asks for reduced motion, and the map
-        zooms without animating.
+      <li>{{ t('accessibility.inPlace.place', { locate: locateLabel }) }}</li>
+      <li v-for="key in inPlaceKeys" :key="key">
+        {{ t(`accessibility.inPlace.${key}`) }}
       </li>
     </ul>
 
-    <h2>Known limits</h2>
-    <p>
-      The map is a drawn canvas, so a screen reader cannot read it. The readout
-      carries the same information as the lines on the map. Text is in English
-      only, and map labels come from OpenStreetMap in the local language.
-    </p>
+    <h2>{{ t('accessibility.sky.heading') }}</h2>
+    <p>{{ t('accessibility.sky.beta') }}</p>
+    <p>{{ t('accessibility.sky.alternative') }}</p>
+    <p>{{ t('accessibility.sky.compass') }}</p>
 
-    <h2>Last review</h2>
-    <p>The author last checked this page on 3 November 2026.</p>
+    <h2>{{ t('accessibility.limits.heading') }}</h2>
+    <p>{{ t('accessibility.limits.body') }}</p>
 
-    <h2>Tell us about a barrier</h2>
-    <p>
-      If something does not work for you, open an issue on
-      <a :href="issuesUrl">GitHub</a>. Say which page and which tool you used.
-    </p>
+    <h2>{{ t('accessibility.review.heading') }}</h2>
+    <p>{{ t('accessibility.review.body') }}</p>
+
+    <h2>{{ t('accessibility.barrier.heading') }}</h2>
+    <i18n-t keypath="accessibility.barrier.body" tag="p">
+      <template #github>
+        <a :href="issuesUrl">GitHub</a>
+      </template>
+    </i18n-t>
   </LegalPage>
 </template>

@@ -8,7 +8,7 @@ test('map tiles load from tiles.openfreemap.org', async ({ page }) => {
       response.status() === 200,
     { timeout: 15_000 }
   );
-  await page.goto('/');
+  await page.goto('/en/');
   await tile;
   await expect(page.locator('.ol-viewport canvas').first()).toBeAttached();
 });
@@ -23,7 +23,7 @@ test('page contacts no host besides itself and tiles.openfreemap.org', async ({
     const { protocol, host } = new URL(request.url());
     if (protocol === 'http:' || protocol === 'https:') hosts.add(host);
   });
-  await page.goto('/?date=2026-06-21&time=16:00');
+  await page.goto('/en/?date=2026-06-21&time=16:00');
   await page.waitForLoadState('networkidle');
   // WHY: ol-mapbox-style injects font <link>s asynchronously after the style loads.
   await page.waitForTimeout(2000);

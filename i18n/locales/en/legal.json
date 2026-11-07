@@ -1,0 +1,126 @@
+{
+  "updated": "Updated 4 November 2026",
+  "privacy": {
+    "title": "Privacy",
+    "description": "Zonkant sets no cookies, has no tracking and stores nothing in your browser. Your location stays on your device.",
+    "lead": "Zonkant does not collect anything about you. It has no accounts, no cookies and no tracking.",
+    "device": {
+      "heading": "What stays on your device",
+      "body": "No cookies. There is no storage either: nothing is saved in your browser's local or session storage, and nothing is remembered when you close the page.",
+      "language": "Zonkant is available in Dutch and English. When you open the site, your device reads your browser's language list to pick one. That list is not sent anywhere and your choice is not saved."
+    },
+    "location": {
+      "heading": "Your location",
+      "press": "Your position is read only when you press \"{locate}\", and only once. It stays on your device: it is never sent to this site or to anyone else. You can also type coordinates or tap the map instead.",
+      "zone": "When the address has no place in it, the map starts at the location of your device's time zone. The time zone is read on your device and is never sent anywhere.",
+      "shared": "The place and time you pick are written into the address of the page (for example {example}) so you can bookmark or share the view. Whoever you give that address to can see those coordinates."
+    },
+    "who": {
+      "heading": "Who your browser talks to",
+      "intro": "The map loads straight from OpenFreeMap, so it can see your IP address, as with any website:",
+      "tiles": "tiles.openfreemap.org supplies the map style, tiles, sprites and glyphs. It receives the area of the map you look at.",
+      "photon": "photon.komoot.io finds places when you use the search field. The search text you type is sent to it, together with your IP address, but only after 3 characters and a short pause. Photon is run by komoot and uses OpenStreetMap data. Coordinates and your \"{locate}\" position are never sent to it.",
+      "cloudflare": "Cloudflare hosts this site and delivers its files.",
+      "local": "Sun positions are calculated in your browser. Fonts and icons are served from this site, not from a third party."
+    },
+    "tracking": {
+      "heading": "Tracking",
+      "body": "There is no tracking: no visitor counting, no advertising and no fingerprinting."
+    },
+    "questions": {
+      "heading": "Questions",
+      "body": "Open an issue on {github} and the author will reply there."
+    },
+    "sky": {
+      "heading": "Sky view (Beta)",
+      "camera": "The camera starts only after you tap \"{start}\". Camera frames stay on your device: they are not recorded, uploaded or stored, and the picture is only shown on your screen.",
+      "sensors": "The device's motion and orientation sensors (compass and tilt) are read on your device to line the sun path up with the camera. Their readings are never sent anywhere."
+    }
+  },
+  "terms": {
+    "title": "Terms",
+    "description": "The code is MIT licensed. Sun times and shadows are estimates. Map data is ODbL.",
+    "lead": "Zonkant is a free, open-source sun and shadow planner. Treat what it shows as a good estimate, not a guarantee.",
+    "code": {
+      "heading": "The code",
+      "body": "The source code is released under the MIT licence. You may use, copy and change it, as long as you keep the licence notice. It comes with no warranty. The full text is in the {license}.",
+      "license": "LICENSE file"
+    },
+    "estimates": {
+      "heading": "Estimates only",
+      "body": "Sun positions and times are calculated for flat ground with no buildings, trees or hills, and are shown in your device's time zone. Real light and shade will differ. Zonkant is not safety-critical: do not use it for navigation, aviation, solar installation sizing or anything else where an error could cause harm.",
+      "sun": "Never look straight at the sun."
+    },
+    "mapData": {
+      "heading": "Map data",
+      "body": "Map data is from OpenStreetMap contributors under the {odbl}. Map tiles are made by OpenFreeMap from OpenMapTiles, under the {openFreeMapTerms} and the {openMapTiles} terms. See the {credits} for everything this site is built on.",
+      "openFreeMapTerms": "OpenFreeMap terms",
+      "credits": "credits"
+    },
+    "data": {
+      "heading": "Your data",
+      "body": "See the {privacy}: nothing about you is collected.",
+      "privacy": "privacy page"
+    },
+    "questions": {
+      "heading": "Questions",
+      "body": "Open an issue on {github}."
+    }
+  },
+  "accessibility": {
+    "title": "Accessibility",
+    "description": "Zonkant aims to meet WCAG 2.2 level AA and works with a keyboard.",
+    "lead": "Zonkant aims to meet WCAG 2.2 level AA. Everyone should be able to find the sunny side.",
+    "inPlace": {
+      "heading": "What is in place",
+      "place": "You can pick a place without the map: type latitude and longitude, or use \"{locate}\". The time is set with a date field and a slider that works with the arrow keys.",
+      "keyboard": "Every control works with a keyboard, with a thick visible focus ring and targets of at least 44 pixels.",
+      "skip": "A skip link jumps past the header to the main content.",
+      "contrast": "Text and sun lines have enough contrast against their background.",
+      "readout": "The readout gives the sun's height, direction, key times and shadow length as text, and says so when the sun is below the horizon.",
+      "motion": "Animation stops if your device asks for reduced motion, and the map zooms without animating."
+    },
+    "limits": {
+      "heading": "Known limits",
+      "body": "The map is a drawn canvas, so a screen reader cannot read it. The readout carries the same information as the lines on the map. Text is available in Dutch and English, and map labels come from OpenStreetMap in the local language."
+    },
+    "review": {
+      "heading": "Last review",
+      "body": "The author last checked this page on 3 November 2026."
+    },
+    "barrier": {
+      "heading": "Tell us about a barrier",
+      "body": "If something does not work for you, open an issue on {github}. Say which page and which tool you used."
+    },
+    "sky": {
+      "heading": "Sky view (Beta)",
+      "beta": "Sky view is in Beta. Expect rough edges, and tell us about them.",
+      "alternative": "The sun path is drawn on a canvas that a screen reader cannot read. The same information is in a table on that page: the direction and height of the sun at every full hour, for the chosen date and for both solstices.",
+      "compass": "Phone compasses are often off by 10° or more, so the drawn path can be off by the same amount until you point at the sun and calibrate. Treat it as a rough guide."
+    }
+  },
+  "credits": {
+    "title": "Credits",
+    "description": "The map data, tiles, libraries and font that Zonkant is built on.",
+    "lead": "Zonkant stands on open data and open-source work. Thank you to everyone behind it.",
+    "heading": "Map and code",
+    "items": {
+      "osm": "Map data, available under the Open Database Licence (ODbL).",
+      "openMapTiles": "The vector tile schema the map is drawn from.",
+      "openFreeMap": "Free hosting of the map tiles and the Positron style, without an API key.",
+      "photon": "Place search, run by komoot on OpenStreetMap data under the ODbL.",
+      "iana": "Where each time zone sits, used for the starting point. Public domain.",
+      "openLayers": "The map library. BSD 2-Clause licence.",
+      "olMapboxStyle": "Applies the Positron style to OpenLayers. BSD 2-Clause licence.",
+      "suncalc": "Sun position and times, by Volodymyr Agafonkin. BSD 2-Clause licence.",
+      "tiktokSans": "The typeface, self-hosted through Fontsource. SIL Open Font Licence 1.1.",
+      "nuxt": "The web framework. MIT licence.",
+      "vue": "The UI library. MIT licence.",
+      "nuxtI18n": "Dutch and English text and routes. MIT licence."
+    },
+    "licences": {
+      "heading": "Licence texts",
+      "body": "The full copyright notices and licence texts are in {notices}."
+    }
+  }
+}
