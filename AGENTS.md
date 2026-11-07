@@ -12,12 +12,12 @@ Verified 2026-11-03 with pnpm 10 and Node 24. `unverified` = not run in bootstra
 ```bash
 pnpm install --frozen-lockfile   # unverified: postinstall runs `nuxt prepare`; eslint needs `.nuxt/`
 pnpm dev                         # unverified: Nuxt dev server
-pnpm test                        # verified 2026-11-07: vitest run, 35 files, 360 tests pass
+pnpm test                        # verified 2026-11-07: vitest run, 36 files, 363 tests pass
 pnpm test:e2e                    # verified 2026-11-07: build, then Playwright on :4312 (137 pass, 1 skipped); needs `pnpm exec playwright install chromium`
 pnpm lint                        # verified: eslint . — clean
 pnpm type-check                  # verified: vue-tsc --noEmit — exit 0
 pnpm format:check                # verified: prettier --check — clean
-pnpm build                       # verified: nuxt generate -> .output/public, 26 routes (nl + en trees), no network; check output for `WARN` (exit 0 hides them)
+pnpm build                       # verified: nuxt generate -> .output/public, 26 routes (nl + en trees), no network; FAILS on any unallowlisted `WARN` (`scripts/generate-checked.mjs`)
 pnpm preview                     # unverified: serve the built output
 pnpm run deploy                  # verified 2026-11-03 (wrangler deploy step, run from a clean main worktree with sg208 workers token): side effect; main only
 ```
@@ -89,7 +89,7 @@ pnpm run deploy                  # verified 2026-11-03 (wrangler deploy step, ru
 - `app.config.ts:3` — `repoUrl` = github.com/sg208/zonkant (resolves, HTTP 200 on 2026-11-03)
 - `wrangler.jsonc:8` — custom domain `zonkant.engg.app`; `workers_dev` and preview URLs off (`wrangler.jsonc:9-10`)
 - `playwright.config.ts:19` — e2e serves `.output/public` on 4312; run `pnpm build` first (`test:e2e` does)
-- `nuxt.config.ts` i18n — ONE loader file per locale (`i18n/locales/<code>.ts`); listing several JSON `files` logs "Cannot assign to read only property" with build exit 0 (`.enggflo/learning.md` `i18n-multi-file-readonly-merge`) <!-- enggflo -->
+- `nuxt.config.ts` i18n — ONE loader file per locale (`i18n/locales/<code>.ts`); listing several JSON `files` logs "Cannot assign to read only property" and now fails the build (exit 1 via `scripts/check-build-warnings.mjs`; was exit 0) (`.enggflo/learning.md` `i18n-multi-file-readonly-merge`) <!-- enggflo -->
 - `vitest.config.ts` overrides i18n `defaultLocale: 'en'` for tests; Dutch component tests mount with `route: '/nl'`. e2e uses `/en/…` (Playwright locale en-US) and `/…` for Dutch <!-- enggflo -->
 - e2e on the map page MUST wait for `.ol-viewport` attached before typing; i18n preload slows hydration (`.enggflo/learning.md` `e2e-type-before-hydration`) <!-- enggflo -->
 - `tests/unit/i18nKeys.spec.ts` — nl and en need identical keys and `{placeholders}`; top-level keys MUST NOT repeat across `app`/`legal`/`sky` (shallow merge in the loaders) <!-- enggflo -->
@@ -111,3 +111,4 @@ pnpm run deploy                  # verified 2026-11-03 (wrangler deploy step, ru
 - vitest — https://vitest.dev/llms.txt (llms.txt)
 - @fontsource-variable/tiktok-sans — https://fontsource.org/llms.txt (llms.txt)
 - prettier — https://prettier.io/llms.txt (llms.txt)
+- @nuxtjs/i18n — https://i18n.nuxtjs.org/llms.txt (llms.txt) <!-- enggflo -->

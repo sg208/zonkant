@@ -26,7 +26,7 @@ Estimates assume flat ground with no buildings, and times are shown in your devi
 ```bash
 pnpm install --frozen-lockfile   # install dependencies
 pnpm dev                         # dev server
-pnpm build                       # nuxt generate, output in .output/public
+pnpm build                       # nuxt generate (fails on WARN), output in .output/public
 pnpm preview                     # serve the built site locally
 pnpm type-check                  # TypeScript check
 pnpm lint                        # lint

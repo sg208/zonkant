@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "node scripts/generate-checked.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "fix": "pnpm lint:fix && pnpm format",
@@ -21,7 +21,7 @@
     "type-check": "vue-tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "pnpm build && playwright test",
-    "build": "nuxt generate",
+    "build": "pnpm generate",
     "deploy": "pnpm generate && wrangler deploy"
   },
   "packageManager": "pnpm@10.34.8",
