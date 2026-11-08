@@ -23,6 +23,25 @@ describe('PlaceInputs', () => {
     expect(wrapper.get('input[name="lon"]').attributes('id')).toBeTruthy();
   });
 
+  it.each(['lat', 'lon'])(
+    'describes the %s input with the privacy hint',
+    async (name) => {
+      const wrapper = await mountInputs();
+      const input = wrapper.get(`input[name="${name}"]`);
+      const describedIds = (input.attributes('aria-describedby') ?? '').split(
+        ' '
+      );
+      const hintId =
+        describedIds.find((describedId: string) =>
+          describedId.endsWith('-hint')
+        ) ?? '';
+      expect(hintId).not.toBe('');
+      expect(wrapper.get(`#${hintId}`).text()).toBe(
+        'Your location stays on this device and is never sent anywhere.'
+      );
+    }
+  );
+
   it('emits a valid place', async () => {
     const wrapper = await mountInputs();
     await wrapper.get('input[name="lat"]').setValue('51.9244');
@@ -45,7 +64,13 @@ describe('PlaceInputs', () => {
       const input = wrapper.get(`input[name="${name}"]`);
       await input.setValue(value);
       expect(input.attributes('aria-invalid')).toBe('true');
-      const errorId = input.attributes('aria-describedby') ?? '';
+      const describedIds = (input.attributes('aria-describedby') ?? '').split(
+        ' '
+      );
+      const errorId =
+        describedIds.find((describedId: string) =>
+          describedId.endsWith('-error')
+        ) ?? '';
       expect(errorId).not.toBe('');
       expect(wrapper.get(`#${errorId}`).text()).toContain(message);
       expect(wrapper.emitted('update')).toBeUndefined();

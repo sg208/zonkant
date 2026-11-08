@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { AppLocale } from '~/types/locale';
 import type { DayTimes, SunReading, TimeRange } from '~/types/sun';
 import {
   formatAltitude,
@@ -17,10 +16,8 @@ const props = defineProps<{
   timeZone: string;
 }>();
 
-const { t, locale } = useI18n();
-const appLocale = computed<AppLocale>(() =>
-  locale.value === 'nl' ? 'nl' : 'en'
-);
+const { t } = useI18n();
+const { appLocale } = useAppLocale();
 
 const isBelowHorizon = computed(() => props.reading.altitudeDeg <= 0);
 
@@ -38,10 +35,12 @@ const eventText = (date: Date | null): string => {
   return t('panel.none');
 };
 
-const rangeText = (range: TimeRange): string =>
-  range.start || range.end
-    ? `${formatTime(range.start, appLocale.value)}-${formatTime(range.end, appLocale.value)}`
-    : t('panel.none');
+const rangeText = (range: TimeRange): string => {
+  if (!range.start && !range.end) return t('panel.none');
+  const start = formatTime(range.start, appLocale.value);
+  const end = formatTime(range.end, appLocale.value);
+  return `${start}-${end}`;
+};
 
 const bothRanges = (morning: TimeRange, evening: TimeRange): string =>
   t('panel.bothRanges', {

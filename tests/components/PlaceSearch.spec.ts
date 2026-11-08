@@ -42,6 +42,15 @@ afterEach(() => {
 });
 
 describe('PlaceSearch', () => {
+  it('describes the input with the privacy hint', async () => {
+    const wrapper = await mountSearch();
+    const hintId = wrapper.get('input').attributes('aria-describedby') ?? '';
+    expect(hintId).not.toBe('');
+    expect(wrapper.get(`#${hintId}`).text()).toBe(
+      'Search text is sent to Photon (komoot) to find places.'
+    );
+  });
+
   it('has a labelled combobox wired to a listbox', async () => {
     const wrapper = await mountSearch();
     const input = wrapper.get('input');

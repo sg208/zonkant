@@ -1,3 +1,4 @@
+import { wrapDegrees } from '~/utils/angles';
 import type { AppLocale } from '~/types/locale';
 
 // Dutch compass names use O (oost) and Z (zuid), not E and S
@@ -40,6 +41,12 @@ const COMPASS_POINTS: Record<AppLocale, readonly string[]> = {
   ],
 };
 const INTL_TAGS: Record<AppLocale, string> = { nl: 'nl-NL', en: 'en-GB' };
+
+// Strict match keeps regional tags such as nl-NL on English, as before
+export const toAppLocale = (locale: string): AppLocale =>
+  locale === 'nl' ? 'nl' : 'en';
+
+export const intlTagFor = (locale: AppLocale): string => INTL_TAGS[locale];
 const HOUR_UNIT: Record<AppLocale, string> = { nl: 'u', en: 'h' };
 const NO_SHADOW: Record<AppLocale, string> = {
   nl: 'Geen schaduw',
@@ -78,8 +85,7 @@ export const formatAltitude = (degrees: number, locale: AppLocale): string =>
 export const formatCompass = (degrees: number, locale: AppLocale): string => {
   const points = COMPASS_POINTS[locale];
   const step = 360 / points.length;
-  const index =
-    Math.round((((degrees % 360) + 360) % 360) / step) % points.length;
+  const index = Math.round(wrapDegrees(degrees) / step) % points.length;
   return points[index] ?? 'N';
 };
 

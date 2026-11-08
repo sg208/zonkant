@@ -1,4 +1,5 @@
 import { getPosition, getTimes } from 'suncalc';
+import { wrapDegrees } from '~/utils/angles';
 import type { DayTimes, SunReading, TimeRange } from '~/types/sun';
 
 // suncalc 2.x: azimuth is clockwise from north (0 = N, 90 = E, 180 = S), altitude in degrees,
@@ -10,7 +11,7 @@ const BISECT_STEPS = 24;
 
 export const readSun = (date: Date, lat: number, lon: number): SunReading => {
   const { altitude, azimuth } = getPosition(date, lat, lon);
-  return { altitudeDeg: altitude, bearingDeg: ((azimuth % 360) + 360) % 360 };
+  return { altitudeDeg: altitude, bearingDeg: wrapDegrees(azimuth) };
 };
 
 // Sun altitude rises monotonically nadir -> noon and falls noon -> next nadir, so bisect.

@@ -1,4 +1,10 @@
 import type { ViewState } from '~/types/sun';
+import {
+  parseClockText,
+  parseDateText,
+  toClockText,
+  toDateText,
+} from '~/utils/dateText';
 
 // Dam Square, Amsterdam
 export const DEFAULT_PLACE = { lat: 52.3731, lon: 4.8926 };
@@ -8,8 +14,6 @@ const TIME = /^([01]\d|2[0-3]):([0-5]\d)$/;
 const COORD_DECIMALS = 5;
 
 type RawQuery = Record<string, unknown>;
-
-const pad = (value: number): string => String(value).padStart(2, '0');
 
 const firstString = (value: unknown): string | null => {
   const first = Array.isArray(value) ? value[0] : value;
@@ -53,14 +57,8 @@ const parseTime = (value: unknown, fallback: string): string => {
 export const parseViewState = (query: RawQuery, now: Date): ViewState => ({
   lat: parseCoord(query.lat, 90, DEFAULT_PLACE.lat),
   lon: parseCoord(query.lon, 180, DEFAULT_PLACE.lon),
-  date: parseDate(
-    query.date,
-    `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
-  ),
-  time: parseTime(
-    query.time,
-    `${pad(now.getHours())}:${pad(now.getMinutes())}`
-  ),
+  date: parseDate(query.date, toDateText(now)),
+  time: parseTime(query.time, toClockText(now)),
 });
 
 const roundCoord = (value: number): string =>
@@ -75,7 +73,13 @@ export const toQuery = (state: ViewState): Record<string, string> => ({
 
 // Local Date from a validated ViewState; local fields keep the wall clock across DST
 export const viewStateToDate = (state: ViewState): Date => {
-  const [year = 0, month = 1, day = 1] = state.date.split('-').map(Number);
-  const [hours = 0, minutes = 0] = state.time.split(':').map(Number);
-  return new Date(year, month - 1, day, hours, minutes);
+  const day = parseDateText(state.date);
+  const { hours, minutes } = parseClockText(state.time);
+  return new Date(
+    day.getFullYear(),
+    day.getMonth(),
+    day.getDate(),
+    hours,
+    minutes
+  );
 };

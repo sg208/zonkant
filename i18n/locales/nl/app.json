@@ -74,7 +74,7 @@
     "outOfRange": "{label} moet tussen -{limit} en {limit} liggen",
     "hint": "Je locatie blijft op dit apparaat en wordt nergens naartoe gestuurd.",
     "geo": {
-      "pending": "Je locatie wordt gezocht...",
+      "pending": "Je locatie wordt gezocht…",
       "granted": "Locatie gevonden. Die blijft op dit apparaat.",
       "denied": "Toegang tot je locatie is geweigerd. Je kunt nog steeds coördinaten invullen of op de kaart tikken.",
       "unsupported": "Deze browser kan je locatie niet delen. Vul coördinaten in of tik op de kaart.",

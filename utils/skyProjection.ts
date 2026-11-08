@@ -5,7 +5,7 @@ import type {
   Viewport,
 } from '~/types/sky';
 
-const DEFAULT_FOV_DEG = 63;
+export const DEFAULT_FOV_DEG = 63;
 const DEGREES_TO_RADIANS = Math.PI / 180;
 
 const toRadians = (degrees: number): number => degrees * DEGREES_TO_RADIANS;

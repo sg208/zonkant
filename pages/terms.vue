@@ -4,12 +4,7 @@ const localePath = useLocalePath();
 const { repoUrl } = useAppConfig();
 const issuesUrl = `${repoUrl}/issues`;
 
-useHead({
-  title: computed(() => `${t('terms.title')} - Zonkant`),
-  meta: [
-    { name: 'description', content: computed(() => t('terms.description')) },
-  ],
-});
+usePageHead({ titleKey: 'terms.title', descriptionKey: 'terms.description' });
 </script>
 
 <template>

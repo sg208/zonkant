@@ -1,3 +1,4 @@
+import { wrapDegrees } from '~/utils/angles';
 import type { OrientationInput, OrientationReading } from '~/types/sky';
 
 type Vector = [east: number, north: number, up: number];
@@ -8,8 +9,6 @@ const RADIANS_TO_DEGREES = 180 / Math.PI;
 const DEGENERATE_HORIZONTAL_LENGTH = 1e-3;
 
 const toRadians = (degrees: number): number => degrees * DEGREES_TO_RADIANS;
-
-const wrapDegrees = (degrees: number): number => ((degrees % 360) + 360) % 360;
 
 // W3C device frame -> Earth frame (east, north, up): Rz(alpha) * Rx(beta) * Ry(gamma)
 const deviceToEarth = (

@@ -1,11 +1,9 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-useHead({
-  title: computed(() => `${t('credits.title')} - Zonkant`),
-  meta: [
-    { name: 'description', content: computed(() => t('credits.description')) },
-  ],
+usePageHead({
+  titleKey: 'credits.title',
+  descriptionKey: 'credits.description',
 });
 
 interface Credit {

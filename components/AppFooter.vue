@@ -75,13 +75,4 @@ const siteLinks = [
   min-height: var(--target);
   text-decoration-thickness: 2px;
 }
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
 </style>

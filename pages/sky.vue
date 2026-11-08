@@ -13,12 +13,7 @@ const mapLink = computed(() =>
   localePath({ path: '/', query: toQuery(state) })
 );
 
-useHead({
-  title: computed(() => `${t('sky.link')} - Zonkant`),
-  meta: [
-    { name: 'description', content: computed(() => t('sky.description')) },
-  ],
-});
+usePageHead({ titleKey: 'sky.link', descriptionKey: 'sky.description' });
 </script>
 
 <template>

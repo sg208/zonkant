@@ -11,7 +11,7 @@ pnpm install --frozen-lockfile
 pnpm build
 ```
 
-`pnpm build` runs `nuxt generate`. The output goes to `.output/public`. The build needs no network: Zonkant has one page plus four legal pages, all prerendered, and sun positions are calculated in the browser.
+`pnpm build` runs `nuxt generate`. The output goes to `.output/public`. The build needs no network: Zonkant has the map page, the Sky view and four legal pages in Dutch and English, all prerendered (26 routes), and sun positions are calculated in the browser.
 
 ## Deploy
 

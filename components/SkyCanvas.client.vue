@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import type {
-  CalibrationOffsets,
-  ScreenPoint,
-  SkyAccessStatus,
-  SkyPathPoint,
-} from '~/types/sky';
+import { applyOffsets } from '~/utils/skyCalibration';
 import {
-  applyOffsets,
-  calibrateToCurrentSun,
-  nudge,
-  resetCalibration,
-} from '~/utils/skyCalibration';
-import { sampleSunPath, solsticeDays } from '~/utils/skyPath';
-import { projectPath, projectSkyPoint } from '~/utils/skyProjection';
+  accessStatusKey,
+  canRetryAccess,
+  combineAccessStatus,
+  isSensorBlocked,
+  showsStartButton as shouldShowStartButton,
+} from '~/utils/skyAccess';
+import { buildArcs, drawSkyOverlay } from '~/utils/skyDraw';
+import { DEFAULT_FOV_DEG } from '~/utils/skyProjection';
 import { readSun } from '~/utils/sun';
 
 // Frames only ever go to the <video> element on this page; the canvas holds lines.
@@ -23,118 +19,41 @@ const props = defineProps<{
   date: string;
 }>();
 
-interface ArcStyle {
-  id: 'selected' | 'june' | 'december';
-  path: SkyPathPoint[];
-  labelKey: string;
-  width: number;
-  colour: string;
-  dash: number[];
-  cap: CanvasLineCap;
-  // The selected arc turns solid once the compass is calibrated
-  uncalibratedDash?: number[];
-}
-
-const DEFAULT_FOV_DEG = 63;
-const SUN_NOW_COLOUR = 'rgb(255, 212, 0)';
-const OUTLINE_COLOUR = 'rgba(20, 24, 28, 0.9)';
-const MARKER_RADIUS = 9;
 const MINUTE_MS = 60_000;
 
 const { t } = useI18n();
 const orientation = useDeviceOrientation();
 const camera = useCameraStream();
+const { offsets, isCalibrated, handleCalibrate, handleNudge, handleReset } =
+  useSkyCalibration(
+    orientation.reading,
+    () => props.lat,
+    () => props.lon
+  );
 
 const stageEl = ref<HTMLElement | null>(null);
 const sectionEl = ref<HTMLElement | null>(null);
 const statusEl = ref<HTMLElement | null>(null);
 const videoEl = ref<HTMLVideoElement | null>(null);
 const canvasEl = ref<HTMLCanvasElement | null>(null);
-const offsets = ref<CalibrationOffsets>(resetCalibration());
-const isCalibrated = ref(false);
 const fovDeg = ref(DEFAULT_FOV_DEG);
 const now = ref(new Date());
 
-const displayStatus = computed<SkyAccessStatus>(() => {
-  const cameraStatus = camera.status.value;
-  const sensorStatus = orientation.status.value;
-  for (const terminal of [
-    'denied',
-    'insecure',
-    'unsupported',
-    'busy',
-  ] as const) {
-    if (cameraStatus === terminal || sensorStatus === terminal) return terminal;
-  }
-  if (sensorStatus === 'no-sensor') return 'no-sensor';
-  if (cameraStatus === 'requesting' || sensorStatus === 'requesting')
-    return 'requesting';
-  if (cameraStatus === 'granted' && sensorStatus === 'granted')
-    return 'granted';
-  // Camera is on and the first compass reading has not arrived yet
-  return cameraStatus === 'granted' ? 'requesting' : 'idle';
-});
-const STATUS_KEYS: Record<SkyAccessStatus, string> = {
-  idle: 'idle',
-  requesting: 'requesting',
-  granted: 'ready',
-  denied: 'denied',
-  busy: 'busy',
-  unsupported: 'unsupported',
-  insecure: 'insecure',
-  'no-sensor': 'noSensor',
-};
+const displayStatus = computed(() =>
+  combineAccessStatus(camera.status.value, orientation.status.value)
+);
 const statusText = computed(() =>
-  t(`sky.status.${STATUS_KEYS[displayStatus.value]}`, {
+  t(`sky.status.${accessStatusKey(displayStatus.value)}`, {
     start: t('sky.start'),
   })
 );
 const isCameraOn = computed(() => camera.status.value === 'granted');
-const canRetry = computed(() =>
-  ['denied', 'no-sensor', 'busy'].includes(displayStatus.value)
-);
-const showsStartButton = computed(
-  () => displayStatus.value === 'idle' || canRetry.value
+const canRetry = computed(() => canRetryAccess(displayStatus.value));
+const showsStartButton = computed(() =>
+  shouldShowStartButton(displayStatus.value)
 );
 
-const arcs = computed<ArcStyle[]>(() => {
-  const [year = 0, month = 1, day = 1] = props.date.split('-').map(Number);
-  const solstices = solsticeDays(year);
-  const sampleUp = (when: Date): SkyPathPoint[] =>
-    sampleSunPath(when, props.lat, props.lon).filter(
-      ({ altitudeDeg }) => altitudeDeg >= 0
-    );
-  return [
-    {
-      id: 'selected',
-      path: sampleUp(new Date(year, month - 1, day)),
-      labelKey: 'sky.canvas.selected',
-      width: 4,
-      colour: '#ffffff',
-      dash: [],
-      cap: 'butt',
-      uncalibratedDash: [8, 8],
-    },
-    {
-      id: 'june',
-      path: sampleUp(solstices.june),
-      labelKey: 'sky.canvas.june',
-      width: 2,
-      colour: '#9fe3ff',
-      dash: [18, 8],
-      cap: 'butt',
-    },
-    {
-      id: 'december',
-      path: sampleUp(solstices.december),
-      labelKey: 'sky.canvas.december',
-      width: 2,
-      colour: '#ffb3c7',
-      dash: [2, 8],
-      cap: 'round',
-    },
-  ];
-});
+const arcs = computed(() => buildArcs(props.date, props.lat, props.lon));
 
 const sunIsUpNow = computed(
   () => readSun(now.value, props.lat, props.lon).altitudeDeg > 0
@@ -143,107 +62,6 @@ const calibrateNote = computed(() => {
   if (!sunIsUpNow.value) return t('sky.controls.belowHorizon');
   return orientation.reading.value ? null : t('sky.controls.waiting');
 });
-
-const drawText = (
-  context: CanvasRenderingContext2D,
-  text: string,
-  point: ScreenPoint
-): void => {
-  context.lineWidth = 3;
-  context.strokeStyle = OUTLINE_COLOUR;
-  context.strokeText(text, point.x, point.y);
-  context.fillStyle = '#ffffff';
-  context.fillText(text, point.x, point.y);
-};
-
-const strokeSegments = (
-  context: CanvasRenderingContext2D,
-  segments: ScreenPoint[][],
-  arc: ArcStyle
-): void => {
-  const dash = isCalibrated.value
-    ? arc.dash
-    : (arc.uncalibratedDash ?? arc.dash);
-  context.setLineDash(dash);
-  context.lineCap = arc.cap;
-  for (const [colour, extra] of [
-    [OUTLINE_COLOUR, 3],
-    [arc.colour, 0],
-  ] as const) {
-    context.strokeStyle = colour;
-    context.lineWidth = arc.width + extra;
-    for (const segment of segments) {
-      context.beginPath();
-      segment.forEach((point, index) =>
-        index === 0
-          ? context.moveTo(point.x, point.y)
-          : context.lineTo(point.x, point.y)
-      );
-      context.stroke();
-    }
-  }
-  context.setLineDash([]);
-};
-
-const drawArcLabels = (
-  context: CanvasRenderingContext2D,
-  arc: ArcStyle,
-  segments: ScreenPoint[][]
-): void => {
-  let highest: ScreenPoint | null = null;
-  for (const point of segments.flat()) {
-    if (highest === null || point.y < highest.y) highest = point;
-  }
-  if (highest) {
-    drawText(context, t(arc.labelKey), { x: highest.x, y: highest.y - 12 });
-  }
-};
-
-const drawHourMarks = (
-  context: CanvasRenderingContext2D,
-  arc: ArcStyle,
-  pose: ReturnType<typeof applyOffsets>,
-  viewport: { width: number; height: number }
-): void => {
-  const hours = arc.path.filter(
-    ({ time }) => time.getMinutes() === 0 && time.getSeconds() === 0
-  );
-  for (const hour of hours) {
-    const point = projectSkyPoint(hour, pose, viewport, fovDeg.value);
-    if (!point) continue;
-    context.fillStyle = arc.colour;
-    context.fillRect(point.x - 3, point.y - 3, 6, 6);
-    drawText(context, String(hour.time.getHours()), {
-      x: point.x,
-      y: point.y + 18,
-    });
-  }
-};
-
-const drawSunNow = (
-  context: CanvasRenderingContext2D,
-  pose: ReturnType<typeof applyOffsets>,
-  viewport: { width: number; height: number }
-): void => {
-  const sun = readSun(new Date(), props.lat, props.lon);
-  if (sun.altitudeDeg <= 0) return;
-  const point = projectSkyPoint(
-    { azimuthDeg: sun.bearingDeg, altitudeDeg: sun.altitudeDeg },
-    pose,
-    viewport,
-    fovDeg.value
-  );
-  if (!point) return;
-  context.beginPath();
-  context.arc(point.x, point.y, MARKER_RADIUS, 0, Math.PI * 2);
-  context.fillStyle = SUN_NOW_COLOUR;
-  context.fill();
-  context.beginPath();
-  context.arc(point.x, point.y, MARKER_RADIUS + 1.5, 0, Math.PI * 2);
-  context.lineWidth = 3;
-  context.strokeStyle = OUTLINE_COLOUR;
-  context.stroke();
-};
 
 const draw = (): void => {
   const stage = stageEl.value;
@@ -260,14 +78,16 @@ const draw = (): void => {
   context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
   context.font = '700 14px system-ui, sans-serif';
   context.textAlign = 'center';
-  const pose = applyOffsets(raw, offsets.value);
-  for (const arc of arcs.value) {
-    const segments = projectPath(arc.path, pose, viewport, fovDeg.value);
-    strokeSegments(context, segments, arc);
-    drawArcLabels(context, arc, segments);
-    if (arc.id === 'selected') drawHourMarks(context, arc, pose, viewport);
-  }
-  drawSunNow(context, pose, viewport);
+  drawSkyOverlay(context, {
+    arcs: arcs.value,
+    pose: applyOffsets(raw, offsets.value),
+    viewport,
+    fovDeg: fovDeg.value,
+    isCalibrated: isCalibrated.value,
+    translate: (key) => t(key),
+    lat: props.lat,
+    lon: props.lon,
+  });
 };
 
 let frameId = 0;
@@ -311,47 +131,26 @@ const handleRetry = (): void => {
   handleStart();
 };
 
-// The camera is only useful while the sensor works: a blocked sensor would
-// leave it streaming with no overlay, so the stage and controls go with it
-const BLOCKED_SENSOR_STATUSES: SkyAccessStatus[] = [
-  'denied',
-  'no-sensor',
-  'unsupported',
-];
+const handlePrimaryAction = (): void => {
+  if (canRetry.value) {
+    handleRetry();
+    return;
+  }
+  handleStart();
+};
 
 // Stopping the camera unmounts the stage and SkyControls; focus sitting inside
 // them would fall on <body>, so it moves to the status line instead
 watch(
   () => orientation.status.value,
   (sensorStatus) => {
-    if (!BLOCKED_SENSOR_STATUSES.includes(sensorStatus)) return;
+    if (!isSensorBlocked(sensorStatus)) return;
     const isFocusInside =
       sectionEl.value?.contains(document.activeElement) ?? false;
     camera.stop();
     if (isFocusInside) focusStatus();
   }
 );
-
-const handleCalibrate = (): void => {
-  const raw = orientation.reading.value;
-  if (!raw) return;
-  const result = calibrateToCurrentSun(raw, props.lat, props.lon);
-  if (!result.ok) return;
-  offsets.value = result.offsets;
-  isCalibrated.value = true;
-};
-
-const handleNudge = (step: 1 | -1): void => {
-  offsets.value = {
-    ...offsets.value,
-    headingOffsetDeg: nudge(offsets.value.headingOffsetDeg, step),
-  };
-};
-
-const handleReset = (): void => {
-  offsets.value = resetCalibration();
-  isCalibrated.value = false;
-};
 
 let resizeObserver: ResizeObserver | undefined;
 let clockTimer: ReturnType<typeof setInterval> | undefined;
@@ -385,7 +184,7 @@ onBeforeUnmount(() => {
       v-if="showsStartButton"
       type="button"
       class="sky-canvas__start"
-      @click="canRetry ? handleRetry() : handleStart()"
+      @click="handlePrimaryAction"
     >
       {{ canRetry ? t('sky.retry') : t('sky.start') }}
     </button>

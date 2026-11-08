@@ -11,14 +11,9 @@ const inPlaceKeys = [
   'motion',
 ] as const;
 
-useHead({
-  title: computed(() => `${t('accessibility.title')} - Zonkant`),
-  meta: [
-    {
-      name: 'description',
-      content: computed(() => t('accessibility.description')),
-    },
-  ],
+usePageHead({
+  titleKey: 'accessibility.title',
+  descriptionKey: 'accessibility.description',
 });
 </script>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AppLocale } from '~/types/locale';
+import { parseDateText } from '~/utils/dateText';
 import { formatAltitude, formatCompass, formatTime } from '~/utils/format';
 import { hourMarks, sampleSunPath, solsticeDays } from '~/utils/skyPath';
 
@@ -19,16 +19,10 @@ interface TimesRow {
   height: string;
 }
 
-const { t, locale } = useI18n();
-const appLocale = computed<AppLocale>(() =>
-  locale.value === 'nl' ? 'nl' : 'en'
-);
-const INTL_TAGS: Record<AppLocale, string> = { nl: 'nl-NL', en: 'en-GB' };
+const { t } = useI18n();
+const { appLocale, intlTag } = useAppLocale();
 
-const selectedDay = computed(() => {
-  const [year = 0, month = 1, day = 1] = props.date.split('-').map(Number);
-  return new Date(year, month - 1, day);
-});
+const selectedDay = computed(() => parseDateText(props.date));
 
 const rowsForDay = (day: Date, dayLabel: string): TimesRow[] => {
   const language = appLocale.value;
@@ -39,17 +33,21 @@ const rowsForDay = (day: Date, dayLabel: string): TimesRow[] => {
     ({ time, altitudeDeg }) =>
       time.getDate() === day.getDate() && altitudeDeg > 0
   );
-  return sunUpAtFullHours.map(({ time, azimuthDeg, altitudeDeg }) => ({
-    key: `${dayLabel}-${time.getTime()}`,
-    day: dayLabel,
-    time: formatTime(time, language),
-    direction: `${Math.round(azimuthDeg)}° ${formatCompass(azimuthDeg, language)}`,
-    height: formatAltitude(altitudeDeg, language),
-  }));
+  return sunUpAtFullHours.map(({ time, azimuthDeg, altitudeDeg }) => {
+    const roundedAzimuth = Math.round(azimuthDeg);
+    const compass = formatCompass(azimuthDeg, language);
+    return {
+      key: `${dayLabel}-${time.getTime()}`,
+      day: dayLabel,
+      time: formatTime(time, language),
+      direction: `${roundedAzimuth}° ${compass}`,
+      height: formatAltitude(altitudeDeg, language),
+    };
+  });
 };
 
 const rows = computed<TimesRow[]>(() => {
-  const formatDate = new Intl.DateTimeFormat(INTL_TAGS[appLocale.value], {
+  const formatDate = new Intl.DateTimeFormat(intlTag.value, {
     dateStyle: 'long',
   });
   const solstices = solsticeDays(selectedDay.value.getFullYear());
