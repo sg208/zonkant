@@ -18,7 +18,7 @@ describe('useAppLocale', () => {
     expect(wrapper.text()).toBe('nl|nl-NL');
   });
 
-  it('defaults to English in the test config', async () => {
+  it('reads English from the /en route', async () => {
     const wrapper = await mountSuspended(Probe, { route: '/en' });
     expect(wrapper.text()).toBe('en|en-GB');
   });

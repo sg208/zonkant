@@ -80,11 +80,12 @@ watch(coords, (place) => {
   emit('update', place);
 });
 
-// The privacy hint always describes both inputs; an error id joins it when set.
+// The privacy hint always describes both inputs; an error id joins it when set,
+// listed first so a screen reader announces what is wrong before the hint.
 const describedBy = (field: 'lat' | 'lon', hasError: boolean): string => {
   const hintId = `${id}-hint`;
   if (!hasError) return hintId;
-  return `${hintId} ${id}-${field}-error`;
+  return `${id}-${field}-error ${hintId}`;
 };
 const latDescribedBy = computed(() =>
   describedBy('lat', Boolean(latError.value))

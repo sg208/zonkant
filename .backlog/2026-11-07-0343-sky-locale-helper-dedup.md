@@ -29,13 +29,13 @@
 
 ## Done when
 
-| id  | check                                                         | expect                                |
-| --- | ------------------------------------------------------------- | ------------------------------------- |
-| D-1 | `grep -rln "INTL_TAGS" components \| wc -l`                   | `0`                                   |
-| D-2 | `grep -rn "=== 'nl' ? 'nl' : 'en'" components utils \| wc -l` | `0`                                   |
-| D-3 | `pnpm vitest run tests/unit/format.spec.ts`                   | exit 0 · new helper test passes       |
-| D-4 | `pnpm test && pnpm type-check && pnpm lint`                   | exit 0                                |
-| D-5 | `pnpm test:e2e -- sky`                                        | exit 0 · Sky view behaviour unchanged |
+| id  | check                                                   | expect                                |
+| --- | ------------------------------------------------------- | ------------------------------------- |
+| D-1 | `grep -rln "INTL_TAGS" components \| wc -l`             | `0`                                   |
+| D-2 | `grep -rn "=== 'nl' ? 'nl' : 'en'" components \| wc -l` | `0`                                   |
+| D-3 | `pnpm vitest run tests/unit/format.spec.ts`             | exit 0 · new helper test passes       |
+| D-4 | `pnpm test && pnpm type-check && pnpm lint`             | exit 0                                |
+| D-5 | `pnpm test:e2e -- sky`                                  | exit 0 · Sky view behaviour unchanged |
 
 ## Shipped
 
@@ -47,4 +47,4 @@
 
 ## Also spotted
 
-- `.enggflo/brain.md:37` — the other v0.1.4 deferred lows (FOV `aria-valuetext`, `/sky` scroll-padding, SkyTimesTable hydration heuristic, `adoptStart` comment vs URL write, `isRelative` unused, direct `/sky` Amsterdam default, `@nuxtjs/i18n` dependency scan) each need their own item.
+- `.enggflo/brain.md:37` — the other v0.1.4 deferred lows (`/sky` scroll-padding, SkyTimesTable hydration heuristic, `adoptStart` comment vs URL write, `isRelative` unused, direct `/sky` Amsterdam default, `@nuxtjs/i18n` dependency scan) each need their own item.
