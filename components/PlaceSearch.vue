@@ -128,6 +128,7 @@ const handleBlur = (): void => {
         :aria-expanded="isExpanded"
         :aria-controls="listId"
         :aria-activedescendant="activeId"
+        :aria-describedby="`${id}-hint`"
         autocomplete="off"
         enterkeyhint="search"
         spellcheck="false"
@@ -164,7 +165,7 @@ const handleBlur = (): void => {
         {{ message }}
       </p>
     </div>
-    <p class="search__hint">
+    <p :id="`${id}-hint`" class="search__hint">
       {{ t('search.hint') }}
     </p>
   </div>

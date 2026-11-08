@@ -18,6 +18,12 @@ const buttonNamed = (
   wrapper.findAll('button').find((button) => name.test(button.text()));
 
 describe('SkyControls', () => {
+  it('reads the field of view in degrees, not as a bare number', async () => {
+    const wrapper = await mountSuspended(SkyControls, { props: PROPS });
+    const slider = wrapper.get('input[type="range"]');
+    expect(slider.attributes('aria-valuetext')).toBe('63°');
+  });
+
   it('warns about the compass until calibrated, then says so', async () => {
     const uncalibrated = await mountSuspended(SkyControls, { props: PROPS });
     expect(uncalibrated.text()).toContain(

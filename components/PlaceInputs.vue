@@ -80,6 +80,19 @@ watch(coords, (place) => {
   emit('update', place);
 });
 
+// The privacy hint always describes both inputs; an error id joins it when set.
+const describedBy = (field: 'lat' | 'lon', hasError: boolean): string => {
+  const hintId = `${id}-hint`;
+  if (!hasError) return hintId;
+  return `${hintId} ${id}-${field}-error`;
+};
+const latDescribedBy = computed(() =>
+  describedBy('lat', Boolean(latError.value))
+);
+const lonDescribedBy = computed(() =>
+  describedBy('lon', Boolean(lonError.value))
+);
+
 const geoMessage = computed(() => {
   const key = GEO_MESSAGE_KEYS[geoState.value];
   return key ? t(key) : '';
@@ -98,7 +111,7 @@ const geoMessage = computed(() => {
         inputmode="decimal"
         step="any"
         :aria-invalid="latError ? 'true' : undefined"
-        :aria-describedby="latError ? `${id}-lat-error` : undefined"
+        :aria-describedby="latDescribedBy"
         @input="handleInput"
       />
     </div>
@@ -112,7 +125,7 @@ const geoMessage = computed(() => {
         inputmode="decimal"
         step="any"
         :aria-invalid="lonError ? 'true' : undefined"
-        :aria-describedby="lonError ? `${id}-lon-error` : undefined"
+        :aria-describedby="lonDescribedBy"
         @input="handleInput"
       />
     </div>
@@ -128,7 +141,7 @@ const geoMessage = computed(() => {
       </p>
       <p v-if="geoMessage">{{ geoMessage }}</p>
     </div>
-    <p class="place__hint">
+    <p :id="`${id}-hint`" class="place__hint">
       {{ t('place.hint') }}
     </p>
   </form>

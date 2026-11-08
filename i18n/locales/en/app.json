@@ -74,7 +74,7 @@
     "outOfRange": "{label} must be between -{limit} and {limit}",
     "hint": "Your location stays on this device and is never sent anywhere.",
     "geo": {
-      "pending": "Finding your location...",
+      "pending": "Finding your location…",
       "granted": "Location found. It stays on this device.",
       "denied": "Location permission was denied. You can still type coordinates or tap the map.",
       "unsupported": "This browser cannot share its location. Type coordinates or tap the map.",

@@ -24,7 +24,9 @@ const minutes = computed(() => {
 
 const handleSlide = (event: Event): void => {
   const value = Number((event.target as HTMLInputElement).value);
-  time.value = `${padTwoDigits(Math.floor(value / 60))}:${padTwoDigits(value % 60)}`;
+  const hours = padTwoDigits(Math.floor(value / 60));
+  const minutesOfHour = padTwoDigits(value % 60);
+  time.value = `${hours}:${minutesOfHour}`;
 };
 
 const handleDate = (event: Event): void => {

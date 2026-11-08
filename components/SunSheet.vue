@@ -54,7 +54,9 @@ const altitudeText = computed(() =>
 );
 
 const summary = computed(() => {
-  const bearing = `${Math.round(props.reading.bearingDeg)}° ${formatCompass(props.reading.bearingDeg, appLocale.value)}`;
+  const roundedBearing = Math.round(props.reading.bearingDeg);
+  const compass = formatCompass(props.reading.bearingDeg, appLocale.value);
+  const bearing = `${roundedBearing}° ${compass}`;
   if (props.reading.altitudeDeg <= 0)
     return t('sheet.summaryDown', { bearing });
   return t('sheet.summaryUp', {

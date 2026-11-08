@@ -35,10 +35,12 @@ const eventText = (date: Date | null): string => {
   return t('panel.none');
 };
 
-const rangeText = (range: TimeRange): string =>
-  range.start || range.end
-    ? `${formatTime(range.start, appLocale.value)}-${formatTime(range.end, appLocale.value)}`
-    : t('panel.none');
+const rangeText = (range: TimeRange): string => {
+  if (!range.start && !range.end) return t('panel.none');
+  const start = formatTime(range.start, appLocale.value);
+  const end = formatTime(range.end, appLocale.value);
+  return `${start}-${end}`;
+};
 
 const bothRanges = (morning: TimeRange, evening: TimeRange): string =>
   t('panel.bothRanges', {

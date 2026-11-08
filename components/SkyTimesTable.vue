@@ -33,13 +33,17 @@ const rowsForDay = (day: Date, dayLabel: string): TimesRow[] => {
     ({ time, altitudeDeg }) =>
       time.getDate() === day.getDate() && altitudeDeg > 0
   );
-  return sunUpAtFullHours.map(({ time, azimuthDeg, altitudeDeg }) => ({
-    key: `${dayLabel}-${time.getTime()}`,
-    day: dayLabel,
-    time: formatTime(time, language),
-    direction: `${Math.round(azimuthDeg)}° ${formatCompass(azimuthDeg, language)}`,
-    height: formatAltitude(altitudeDeg, language),
-  }));
+  return sunUpAtFullHours.map(({ time, azimuthDeg, altitudeDeg }) => {
+    const roundedAzimuth = Math.round(azimuthDeg);
+    const compass = formatCompass(azimuthDeg, language);
+    return {
+      key: `${dayLabel}-${time.getTime()}`,
+      day: dayLabel,
+      time: formatTime(time, language),
+      direction: `${roundedAzimuth}° ${compass}`,
+      height: formatAltitude(altitudeDeg, language),
+    };
+  });
 };
 
 const rows = computed<TimesRow[]>(() => {

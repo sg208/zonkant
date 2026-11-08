@@ -17,7 +17,7 @@ pnpm test:e2e                    # verified 2026-11-08: build, then Playwright o
 pnpm lint                        # verified: eslint . — clean
 pnpm type-check                  # verified: vue-tsc --noEmit — exit 0
 pnpm format:check                # verified: prettier --check — clean
-pnpm build                       # verified: nuxt generate -> .output/public, 26 routes (nl + en trees), no network; FAILS on any unallowlisted `WARN` (`scripts/generate-checked.mjs`)
+pnpm build                       # verified 2026-11-08: nuxt generate -> .output/public, 26 routes (nl + en trees), no network; FAILS on any unallowlisted `WARN` (`scripts/generate-checked.mjs`)
 pnpm preview                     # unverified: serve the built output
 pnpm run deploy                  # verified 2026-11-03 (wrangler deploy step, run from a clean main worktree with sg208 workers token): side effect; main only
 ```

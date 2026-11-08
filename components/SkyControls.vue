@@ -19,6 +19,8 @@ const { intlTag } = useAppLocale();
 const noteId = `${useId()}-note`;
 const fovId = `${useId()}-fov`;
 
+const fovText = computed(() => `${fovDeg.value}°`);
+
 const offsetText = computed(() => {
   const formatter = new Intl.NumberFormat(intlTag.value, {
     signDisplay: 'exceptZero',
@@ -77,8 +79,9 @@ const offsetText = computed(() => {
         min="40"
         max="90"
         step="1"
+        :aria-valuetext="fovText"
       />
-      <span aria-hidden="true">{{ fovDeg }}°</span>
+      <span aria-hidden="true">{{ fovText }}</span>
     </div>
   </div>
 </template>

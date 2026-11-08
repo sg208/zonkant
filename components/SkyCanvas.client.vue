@@ -131,6 +131,14 @@ const handleRetry = (): void => {
   handleStart();
 };
 
+const handlePrimaryAction = (): void => {
+  if (canRetry.value) {
+    handleRetry();
+    return;
+  }
+  handleStart();
+};
+
 // Stopping the camera unmounts the stage and SkyControls; focus sitting inside
 // them would fall on <body>, so it moves to the status line instead
 watch(
@@ -176,7 +184,7 @@ onBeforeUnmount(() => {
       v-if="showsStartButton"
       type="button"
       class="sky-canvas__start"
-      @click="canRetry ? handleRetry() : handleStart()"
+      @click="handlePrimaryAction"
     >
       {{ canRetry ? t('sky.retry') : t('sky.start') }}
     </button>
